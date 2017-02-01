@@ -103,11 +103,11 @@ export default class App extends React.Component {
                     <ul id="slide-out" className="side-nav">
                         <li style={{textAlign: 'center'}}><img src={`http://ligchina.a2${this.state.empresa.Logo}`} style={{width: '200px'}} /></li>
                         <li><div className="divider"></div></li>
-                        <li><Link to="/"><i className="material-icons">home</i>Início</Link></li>
-                        <li><Link to="/entrega"><i className="material-icons">local_shipping</i>Regiões de Entrega</Link></li>
-                        <li><Link to="/cardapio"><i className="material-icons">restaurant</i>Cardápio</Link></li>
-                        <li><Link to="/carrinho"><i className="material-icons">shopping_cart</i>Carrinho</Link></li>
-                        <li><Link to="/empresa"><i className="material-icons">people</i>Sobre nós</Link></li>
+                        <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/"><i className="material-icons">home</i>Início</Link></li>
+                        <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/entrega"><i className="material-icons">local_shipping</i>Regiões de Entrega</Link></li>
+                        <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/cardapio"><i className="material-icons">restaurant</i>Cardápio</Link></li>
+                        <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/carrinho"><i className="material-icons">shopping_cart</i>Carrinho</Link></li>
+                        <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/empresa"><i className="material-icons">people</i>Sobre nós</Link></li>
                         <li>{this.linkConta()}</li>
                         <li><div className="divider"></div></li>
                         {this.state.sidebarItems}
@@ -127,7 +127,7 @@ export default class App extends React.Component {
         if(this.state.login){
             return (<a href="javascript::void(0)" onCLick={()=>console.log('logout')}><i className="material-icons">close</i>Sair</a>);
         }else{
-            return (<Link to="/entrar"><i className="material-icons">vpn_key</i>Entrar</Link>)
+            return (<Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/entrar"><i className="material-icons">vpn_key</i>Entrar</Link>)
         }
     }
 

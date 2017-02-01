@@ -53,7 +53,7 @@ export default class Login extends React.Component {
                             <div className="col s12 m6 offset-m3">
                                 <div className="input-field">
                                   <i className="material-icons prefix">account_circle</i>
-                                  <input type="text"  value={this.state.user} onChange={(e) => this.setState({user: e.target.value})} />
+                                  <input type="text"  value={this.state.user} onChange={(e) => {this.setState({user: e.target.value})}} />
                                   <label htmlFor="icon_prefix">Usuário</label>
                                 </div>
                             </div>
@@ -62,7 +62,7 @@ export default class Login extends React.Component {
                             <div className="col s12 m6 offset-m3">
                                 <div className="input-field">
                                   <i className="material-icons prefix">vpn_key</i>
-                                  <input  type="password" value={this.state.password} onChange={(e) => this.setState({password: e.target.value})} />
+                                  <input  type="password" value={this.state.password} onChange={(e) => {this.setState({password: e.target.value})}} />
                                   <label htmlFor="icon_prefix">Senha</label>
                                 </div>
                             </div>
@@ -119,7 +119,7 @@ export default class Login extends React.Component {
         let self = this;
         this.setState({enviando: true});
         $.ajax({
-            url: '/login/api_post_login',
+            url: 'http://ligchina.a2/login/api_post_login',
             type: 'post',
             dataType: 'json',
             data: {user: this.state.user, password: this.state.password},
