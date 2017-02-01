@@ -68,9 +68,8 @@ export default class Carrinho extends React.Component {
                             <div className="col s8">
                                 <select value="0" onChange={()=>{console.log('ooo')}}>
                                   <option value="0" disabled>Selecione</option>
-                                  <option value="1">Option 1</option>
-                                  <option value="2">Option 2</option>
-                                  <option value="3">Option 3</option>
+                                  <option value="1">Entrega em Domicílio</option>
+                                  <option value="2">Retirar no Estabelecimento</option>
                                 </select>
                             </div>
                         </div>
