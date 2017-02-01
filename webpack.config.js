@@ -9,6 +9,7 @@ module.exports = {
         contentBase: './public',
         port: 3333
     },
+
     module: {
         loaders: [
             {
