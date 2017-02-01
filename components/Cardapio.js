@@ -16,6 +16,7 @@ export default class Cardapio extends React.Component {
           opcoes: null,
           hasData: false,
           hasError: false,
+          produtoSelecionado: null
         }
 
         this.styles = {
@@ -70,16 +71,18 @@ export default class Cardapio extends React.Component {
         return (
             <main className="js-cardapio">
                 {this.showContainer()}
+                {this.addModal()}
             </main>
         )
     }
 
-
-                // <div className="col hide-on-small-only m3 l2">
-                //   <ul className="section table-of-contents">
-                //         {Object.keys(this.state.categorias).map(this.getSpy.bind(this)) }
-                //   </ul>
-                // </div>
+    addModal(){
+        if(this.state.produtoSelecionado != null){
+            return (<ModalProduto {...this.state.produtoSelecionado}  addItensPedido={this.props.addItensPedido} opcoes={this.state.opcoes[this.state.produtoSelecionado.IDProduct]} />);
+        }else{
+            return false;
+        }
+    }
 
     showContainer(){
         if(this.state.hasData){
@@ -130,8 +133,7 @@ export default class Cardapio extends React.Component {
     showVariedade(item, k){
         return (
             <div key={k} className="col l3 m4 s6 ">
-                <Produto {...item} />
-                <ModalProduto {...item}  addItensPedido={this.props.addItensPedido} opcoes={this.state.opcoes[item.IDProduct]} />
+                <Produto item={item} showModal={this.showModal.bind(this)} />
             </div>
         )
     }
@@ -164,6 +166,13 @@ export default class Cardapio extends React.Component {
             })
         })
         return li;
+    }
+
+
+    showModal(item){
+        this.setState({produtoSelecionado: item}, ()=>{
+            $('#modalTamanho').modal('open');
+        })
     }
 
 }

@@ -22,13 +22,16 @@ export default class ModalProduto extends React.Component {
 
     componentDidMount(){
         var self = this;
-        $(`#modalTamanho-${this.props.group_id}`).modal({
+        $('#modalTamanho').modal({
             ready: function(){
                 $(this).find('.tabs').first().tabs({
                     onShow: function(el){
                         self.setState({abaAtiva: el[0].dataset.index});
                     }
                 });
+            },
+            complete: () => {
+
             }
         });
 
@@ -40,21 +43,21 @@ export default class ModalProduto extends React.Component {
 
     render() {
         return (
-          <div id={"modalTamanho-"+this.props.group_id} style={{overflowX: 'hidden'}}  className="js-modalTamanho modal modal-fixed-footer">
+          <div id="modalTamanho" style={{overflowX: 'hidden'}}  className="js-modalTamanho modal modal-fixed-footer">
                 <ul className="tabs" style={{overflowX: 'hidden'}}>
-                    <li className="tab col s4 active"><a href={"#tab1-"+this.props.group_id}>Tamanhos</a></li>
-                    <li className="tab col s4"><a href={"#tab2-"+this.props.group_id}>Opções</a></li>
-                    <li className="tab col s4"><a href={"#tab3-"+this.props.group_id}>Quantidade</a></li>
+                    <li className="tab col s4 active"><a href={"#tab1"}>Tamanhos</a></li>
+                    <li className="tab col s4"><a href={"#tab2"}>Opções</a></li>
+                    <li className="tab col s4"><a href={"#tab3"}>Quantidade</a></li>
                   </ul>
 
             <div className="modal-content">
-                <div id={"tab1-"+this.props.group_id} data-index="1">
+                <div id={"tab1"} data-index="1">
                     <Tamanhos lista={this.props.tamanhos} id={this.props.group_id} setTamanho={this.setTamanho.bind(this)} />
                 </div>
-                <div id={"tab2-"+this.props.group_id} data-index="2">
+                <div id={"tab2"} data-index="2">
                     <Opcoes lista={this.props.opcoes} id={this.props.group_id} setOpcoes={this.setOpcoes.bind(this)} />
                 </div>
-                <div id={"tab3-"+this.props.group_id} data-index="3">
+                <div id={"tab3"} data-index="3">
                    <div className="card">
                         <div className="card-content">
                             <div className="row">
@@ -113,12 +116,12 @@ export default class ModalProduto extends React.Component {
 
     goProximo(){
         var i = Number(this.state.abaAtiva) + 1;
-        $("#modalTamanho-"+this.props.group_id +' ul.tabs').tabs('select_tab', "tab"+i+"-"+this.props.group_id);
+        $("#modalTamanho"+' ul.tabs').tabs('select_tab', "tab"+i);
     }
 
     goAnterior(){
         var i = this.state.abaAtiva - 1;
-        $("#modalTamanho-"+this.props.group_id +' ul.tabs').tabs('select_tab', "tab"+i+"-"+this.props.group_id);
+        $("#modalTamanho"+' ul.tabs').tabs('select_tab', "tab"+i);
     }
 
 
@@ -135,7 +138,7 @@ export default class ModalProduto extends React.Component {
 
         this.props.addItensPedido(dados);
 
-        $(`#modalTamanho-${this.props.group_id}`).modal('close');
+        $(`#modalTamanho`).modal('close');
     }
 
 }
