@@ -37,14 +37,7 @@ export default class App extends React.Component {
     componentDidMount(){
         var self = this;
 
-        let pedido = localStorage.getItem('pedido');
-        let total = localStorage.getItem('total');
-        if(pedido != null){
-            this.setState({pedido: JSON.parse(pedido)});
-        }
-        if(total != null){
-            this.setState({total: total});
-        }
+        this.getLocalData();
 
         $.ajax({
             type: 'GET',
@@ -96,22 +89,13 @@ export default class App extends React.Component {
                     <Cabecalho
                         titulo={this.state.empresa.Name}
                         showTitulo={children.props.showTitulo}
+                        logo={this.state.empresa.Logo}
+                        login={this.state.login}
+                        sidebarItems={this.state.sidebarItems}
                         navStyle={children.props.navStyle} />
                     <Secao img={this.state.empresa.Background} titulo={children.props.nmSecao} />
                     {children}
                     <Rodape />
-                    <ul id="slide-out" className="side-nav">
-                        <li style={{textAlign: 'center'}}><img src={`http://ligchina.a2${this.state.empresa.Logo}`} style={{width: '200px'}} /></li>
-                        <li><div className="divider"></div></li>
-                        <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/"><i className="material-icons">home</i>Início</Link></li>
-                        <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/entrega"><i className="material-icons">local_shipping</i>Regiões de Entrega</Link></li>
-                        <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/cardapio"><i className="material-icons">restaurant</i>Cardápio</Link></li>
-                        <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/carrinho"><i className="material-icons">shopping_cart</i>Carrinho</Link></li>
-                        <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/empresa"><i className="material-icons">people</i>Sobre nós</Link></li>
-                        <li>{this.linkConta()}</li>
-                        <li><div className="divider"></div></li>
-                        {this.state.sidebarItems}
-                    </ul>
                 </div>
             )
         }else{
@@ -123,20 +107,27 @@ export default class App extends React.Component {
     }
 
 
-    linkConta(){
-        if(this.state.login){
-            return (<a href="javascript::void(0)" onCLick={()=>console.log('logout')}><i className="material-icons">close</i>Sair</a>);
-        }else{
-            return (<Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/entrar"><i className="material-icons">vpn_key</i>Entrar</Link>)
-        }
-    }
-
     getDomain(){
         var res = location.hostname.split(".");
         if(res[0] == 'www'){
             return res[1];
         }else{
             return res[0];
+        }
+    }
+
+    getLocalData(){
+        let pedido = localStorage.getItem('pedido');
+        let total = localStorage.getItem('total');
+        let login = localStorage.getItem('login');
+        if(pedido != null){
+            this.setState({pedido: JSON.parse(pedido)});
+        }
+        if(total != null){
+            this.setState({total: total});
+        }
+        if(login != null){
+            this.setState({login: login});
         }
     }
 

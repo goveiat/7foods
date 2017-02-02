@@ -1,5 +1,5 @@
 import React from 'react';
-import {browserHistory} from 'react-router';
+import {hashHistory} from 'react-router';
 
 
 export default class Login extends React.Component {
@@ -22,7 +22,9 @@ export default class Login extends React.Component {
     }
 
     componentDidMount(){
-        var self = this;
+        if(this.props.checkLogin()){
+            hashHistory.replace({pathname: '/cardapio'});
+        }
     }
 
     componentDidUpdate(){
@@ -124,11 +126,13 @@ export default class Login extends React.Component {
             dataType: 'json',
             data: {user: this.state.user, password: this.state.password},
             success: function(retorno){
+                console.log(retorno);
                 self.setState({enviando: false});
                 if(retorno.status){
+                    localStorage.setItem('login', true);
                     self.setState({listaErro: false});
                     self.props.setLogin(true);
-                    browserHistory.replace({pathname: '/cardapio'});
+                    hashHistory.replace({pathname: '/cardapio'});
                 }else{
                     self.setState({listaErro: retorno.lista});
                 }

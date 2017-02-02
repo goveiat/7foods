@@ -34,6 +34,7 @@ export default class Cabecalho extends React.Component {
 
     render() {
         return (
+          <div>
           <div className="navbar-fixed js-nav">
             <nav style={this.props.navStyle}>
               <div className="nav-wrapper">
@@ -47,7 +48,29 @@ export default class Cabecalho extends React.Component {
               </div>
             </nav>
           </div>
+            <ul id="slide-out" className="side-nav">
+                <li style={{textAlign: 'center'}}><img src={`http://ligchina.a2${this.props.logo}`} style={{width: '200px'}} /></li>
+                <li><div className="divider"></div></li>
+                <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/"><i className="material-icons">home</i>Início</Link></li>
+                <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/entrega"><i className="material-icons">local_shipping</i>Regiões de Entrega</Link></li>
+                <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/cardapio"><i className="material-icons">restaurant</i>Cardápio</Link></li>
+                <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/carrinho"><i className="material-icons">shopping_cart</i>Carrinho</Link></li>
+                <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/empresa"><i className="material-icons">people</i>Sobre nós</Link></li>
+                <li>{this.getLinkLogin()}</li>
+                <li><div className="divider"></div></li>
+                {this.props.sidebarItems}
+            </ul>
+          </div>
         )
+    }
+
+
+    getLinkLogin(){
+        if(this.props.login){
+            return (<Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/cardapio"><i className="material-icons">close</i>Sair</Link>);
+        }else{
+            return (<Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/entrar"><i className="material-icons">vpn_key</i>Entrar</Link>)
+        }
     }
 
 
