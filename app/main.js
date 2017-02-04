@@ -8,6 +8,7 @@ import Login from '../components/Login';
 import NotFound from '../components/NotFound';
 import Empresa from '../components/Empresa';
 import Cardapio from '../components/Cardapio';
+import AcessoNegado from '../components/AcessoNegado';
 
 ReactDOM.render(
     <Router history={hashHistory}>
@@ -17,6 +18,7 @@ ReactDOM.render(
             <Route path="/empresa" component={Empresa} />
             <Route path="/carrinho" component={Carrinho} />
             <Route path="/entrar" component={Login} />
+            <Route path="/acessonegado" component={AcessoNegado} />
             <Route path="*" component={NotFound} />
         </Route>
     </Router>
