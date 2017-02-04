@@ -119,14 +119,14 @@ export default class Login extends React.Component {
 
     login(){
         let self = this;
-        // this.setState({enviando: true});
         $.ajax({
-            url: '/login',
+            url: '/api/login',
             type: 'post',
             dataType: 'json',
-            data: {Email: this.state.user, Password: this.state.password},
+            data: {user: this.state.user, password: this.state.password},
             success: function(retorno){
                 console.log(retorno);
+                localStorage.setItem('jwt', retorno.jwt);
                 return;
                 self.setState({enviando: false});
                 if(retorno.status == 1){

@@ -75,8 +75,8 @@ export default class Cabecalho extends React.Component {
     }
 
     getLinkConta(){
-        if(this.props.login){
-            return (<Link onClick={()=>{this.conta();$('.menuLateral').sideNav('hide')}} to="/conta"><i className="material-icons">person</i>Minha Conta</Link>);
+        if(this.props.login || true){
+            return (<Link onClick={()=>{this.conta();$('.menuLateral').sideNav('hide')}}><i className="material-icons">person</i>Minha Conta</Link>);
         }else{
             return false;
         }
@@ -94,5 +94,20 @@ export default class Cabecalho extends React.Component {
     }
 
 
+    conta(){
+        let self = this;
+        $.ajax({
+            url: '/api/conta',
+            type: 'get',
+            dataType: 'json',
+            headers: {"Authorization": 'Bearer '+ localStorage.getItem('jwt')},
+            success: function(retorno){
+              console.log(retorno)
+            },
+            error: function(e){
+                console.log(e)
+            }
+        });
+    }
 
 }
