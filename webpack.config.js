@@ -2,12 +2,22 @@ module.exports = {
     entry: './app/main.js',
     output: {
         path: './public',
-        filename: 'bundle.js'
+        filename: 'bundle.js',
     },
     devServer: {
         inline: true,
+        host: '127.0.0.2',
         contentBase: './public',
-        port: 3333
+        port:8080,
+        proxy: {
+            "/api": {
+                target: "http://api7foods.a2",
+                changeOrigin: true,
+                pathRewrite: {
+                  '^/api': ''
+                }
+            }
+        }
     },
 
     module: {

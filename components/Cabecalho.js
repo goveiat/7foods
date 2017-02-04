@@ -55,7 +55,8 @@ export default class Cabecalho extends React.Component {
                 <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/entrega"><i className="material-icons">local_shipping</i>Regiões de Entrega</Link></li>
                 <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/cardapio"><i className="material-icons">restaurant</i>Cardápio</Link></li>
                 <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/carrinho"><i className="material-icons">shopping_cart</i>Carrinho</Link></li>
-                <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/empresa"><i className="material-icons">people</i>Sobre nós</Link></li>
+                <li><Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/empresa"><i className="material-icons">people</i>Sobre a Empresa</Link></li>
+                <li>{this.getLinkConta()}</li>
                 <li>{this.getLinkLogin()}</li>
                 <li><div className="divider"></div></li>
                 {this.props.sidebarItems}
@@ -73,6 +74,14 @@ export default class Cabecalho extends React.Component {
         }
     }
 
+    getLinkConta(){
+        if(this.props.login){
+            return (<Link onClick={()=>{this.conta();$('.menuLateral').sideNav('hide')}} to="/conta"><i className="material-icons">person</i>Minha Conta</Link>);
+        }else{
+            return false;
+        }
+    }
+
 
     getTitulo(){
       if(this.props.titulo.length > 0 && this.props.showTitulo){
@@ -83,5 +92,7 @@ export default class Cabecalho extends React.Component {
         return false;
       }
     }
+
+
 
 }

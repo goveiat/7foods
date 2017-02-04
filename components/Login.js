@@ -119,22 +119,23 @@ export default class Login extends React.Component {
 
     login(){
         let self = this;
-        this.setState({enviando: true});
+        // this.setState({enviando: true});
         $.ajax({
-            url: 'http://ligchina.a2/login/api_post_login',
+            url: '/login',
             type: 'post',
             dataType: 'json',
-            data: {user: this.state.user, password: this.state.password},
+            data: {Email: this.state.user, Password: this.state.password},
             success: function(retorno){
                 console.log(retorno);
+                return;
                 self.setState({enviando: false});
-                if(retorno.status){
+                if(retorno.status == 1){
                     localStorage.setItem('login', true);
                     self.setState({listaErro: false});
                     self.props.setLogin(true);
                     hashHistory.replace({pathname: '/cardapio'});
                 }else{
-                    self.setState({listaErro: retorno.lista});
+                    self.setState({listaErro: retorno.msg});
                 }
             },
             error: function(e){

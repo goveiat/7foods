@@ -42,7 +42,7 @@ export default class App extends React.Component {
         $.ajax({
             type: 'GET',
             dataType: 'json',
-            url: `http://www.ligchina.a2/json/empresa/api_get_empresa/ligchina`,
+            url: '/api/empresa/ligchina',
             success: function(retorno){
                 if(retorno !== []){
                     self.setState({
