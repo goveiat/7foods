@@ -21,12 +21,11 @@ export default class ModalProduto extends React.Component {
     }
 
     componentDidMount(){
-        var self = this;
         $('#modalTamanho').modal({
-            ready: function(){
+            ready: () => {
                 $(this).find('.tabs').first().tabs({
-                    onShow: function(el){
-                        self.setState({abaAtiva: el[0].dataset.index});
+                    onShow: (el) => {
+                        this.setState({abaAtiva: el[0].dataset.index});
                     }
                 });
             },

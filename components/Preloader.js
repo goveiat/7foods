@@ -27,28 +27,26 @@ export default class Preloader extends React.Component {
     }
 
     componentDidMount(){
-        var self = this;
-        self.setState({msg: self.props.msg1});
+        this.setState({msg: this.props.msg1});
 
-        this.sto.msg2 = setTimeout(function(){
-          self.setState({msg: self.props.msg2});
+        this.sto.msg2 = setTimeout(() => {
+          this.setState({msg: this.props.msg2});
         }, 1500);
 
-        this.sto.msg3 = setTimeout(function(){
-          self.setState({msg: self.props.msg3});
+        this.sto.msg3 = setTimeout(() => {
+          this.setState({msg: this.props.msg3});
         }, 3000);
 
-        this.sto.msg4 = setTimeout(function(){
-          self.setState({msg: self.props.msg4});
+        this.sto.msg4 = setTimeout(() => {
+          this.setState({msg: this.props.msg4});
         }, 5000);
 
     }
 
     componentDidUpdate(){
-      var self = this;
         if(this.props.hasError){
-          this.sto.msgErro = setTimeout(function(){
-            self.setState({msg: self.props.msgErro});
+          this.sto.msgErro = setTimeout(() => {
+            this.setState({msg: this.props.msgErro});
           }, 6000);
         }
     }

@@ -30,32 +30,32 @@ export default class Cardapio extends React.Component {
     }
 
     componentDidMount(){
-        var self = this;
-        self.props.setSideBarItens(
+        this.props.setSideBarItens(
             <li>
                 <div className="progress">
                   <div className="indeterminate"></div>
               </div>
-            </li>)
+            </li>);
+
         $.ajax({
             type: 'GET',
             dataType: 'json',
-            url: `api/empresa/${self.props.IDCompany}/produtos`,
-            success: function(retorno){
-                console.log(retorno)
+            url: `api/empresa/${this.props.IDCompany}/produtos`,
+            headers: {"Authorization": localStorage.getItem('jwt')},
+            success: (retorno) => {
                 if(retorno !== []){
-                    self.setState({
+                    this.setState({
                       categorias: retorno.categorias,
                       variedades: retorno.variedades,
                       opcoes: retorno.opcoes,
                       hasData: true
                     });
-                    self.props.setSideBarItens(self.setMenu());
+                    this.props.setSideBarItens(this.setMenu());
                 }
             },
-            error: function(e){
+            error: (e) => {
                 console.error(e.responseText)
-                self.setState({hasError: true});
+                this.setState({hasError: true});
             }
         });
 

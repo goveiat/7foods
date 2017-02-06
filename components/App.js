@@ -26,7 +26,7 @@ export default class App extends React.Component {
             h_funcionamento: null,
             tipo_pagamento: null,
             hasData: false,
-            login: false
+            login: false,
         }
     }
 
@@ -35,17 +35,16 @@ export default class App extends React.Component {
     }
 
     componentDidMount(){
-        var self = this;
-
         this.getLocalData();
 
         $.ajax({
             type: 'GET',
             dataType: 'json',
             url: '/api/empresa/ligchina',
-            success: function(retorno){
+            headers: {"Authorization": localStorage.getItem('jwt')},
+            success: (retorno) => {
                 if(retorno !== []){
-                    self.setState({
+                    this.setState({
                         empresa: retorno.empresa,
                         enderecos: retorno.enderecos,
                         h_entrega: retorno.h_entrega,
@@ -55,8 +54,9 @@ export default class App extends React.Component {
                     });
                 }
             },
-            error: function(e){
-                self.setState({hasError: true});
+            error: (e) => {
+                console.log(e);
+                this.setState({hasError: true});
             }
         })
     }

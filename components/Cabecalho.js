@@ -40,6 +40,7 @@ export default class Cabecalho extends React.Component {
               <div className="nav-wrapper">
                 {this.getTitulo()}
                 <ul className="right">
+                  <li><a data-activates="slide-out" className="menuLateral"><i className="large material-icons">person</i></a></li>
                   <li><a data-activates="slide-out" className="menuLateral"><i className="large material-icons">menu</i></a></li>
                 </ul>
                 <ul className="left">
@@ -95,16 +96,15 @@ export default class Cabecalho extends React.Component {
 
 
     conta(){
-        let self = this;
         $.ajax({
             url: '/api/conta',
             type: 'get',
             dataType: 'json',
             headers: {"Authorization": 'Bearer '+ localStorage.getItem('jwt')},
-            success: function(retorno){
+            success: (retorno) => {
               console.log(retorno)
             },
-            error: function(e){
+            error: (e) => {
                 console.log(e)
             }
         });

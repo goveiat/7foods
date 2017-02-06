@@ -19,7 +19,6 @@ export default class Carousel extends React.Component {
     }
 
     componentDidMount(){
-        var self = this;
 
         if(this.props.api !== null){
             var {origin, pathname} = this.props.api;
@@ -27,10 +26,10 @@ export default class Carousel extends React.Component {
                 url: origin + pathname,
                 type: 'GET',
                 dataType: 'json',
-                success: function(data){
-                    self.setState({items : data});
+                success: (data) => {
+                    this.setState({items : data});
                 },
-                error: function(e){
+                error: (e) => {
                     console.error(e.responseText)
                 }
             })

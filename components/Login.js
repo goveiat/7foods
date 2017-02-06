@@ -85,7 +85,7 @@ export default class Login extends React.Component {
     showErro(){
         let erros = [];
         if(this.state.listaErro){
-            $(this.state.listaErro).each(function(){
+            $(this.state.listaErro).each(() => {
                 if(this.nodeType !== 3){
                     erros.push($(this).text());
                 }
@@ -118,29 +118,26 @@ export default class Login extends React.Component {
 
 
     login(){
-        let self = this;
         $.ajax({
             url: '/api/login',
             type: 'post',
             dataType: 'json',
             data: {user: this.state.user, password: this.state.password},
-            success: function(retorno){
-                console.log(retorno);
+            success: (retorno) => {
                 localStorage.setItem('jwt', retorno.jwt);
-                return;
-                self.setState({enviando: false});
-                if(retorno.status == 1){
-                    localStorage.setItem('login', true);
-                    self.setState({listaErro: false});
-                    self.props.setLogin(true);
-                    hashHistory.replace({pathname: '/cardapio'});
-                }else{
-                    self.setState({listaErro: retorno.msg});
-                }
+                this.setState({enviando: false});
+                localStorage.setItem('login', true);
+                this.setState({listaErro: false});
+                this.props.setLogin(true);
+                hashHistory.replace({pathname: '/cardapio'});
             },
-            error: function(e){
-                self.setState({enviando: false});
-                console.log(e.responseText)
+            error: (e) => {
+                this.setState({enviando: false});
+                switch(e.status){
+                    case 403:
+                        this.setState({listaErro: 'Email ou Senha inválidos'});
+                        break;
+                }
             }
         });
     }
