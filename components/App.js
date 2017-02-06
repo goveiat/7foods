@@ -43,20 +43,24 @@ export default class App extends React.Component {
             url: '/api/empresa/ligchina',
             headers: {"Authorization": localStorage.getItem('jwt')},
             success: (retorno) => {
-                if(retorno !== []){
-                    this.setState({
-                        empresa: retorno.empresa,
-                        enderecos: retorno.enderecos,
-                        h_entrega: retorno.h_entrega,
-                        h_funcionamento: retorno.h_funcionamento,
-                        tipo_pagamento: retorno.tipo_pagamento,
-                        hasData: true
-                    });
-                }
+                this.setState({
+                    empresa: retorno.empresa,
+                    enderecos: retorno.enderecos,
+                    h_entrega: retorno.h_entrega,
+                    h_funcionamento: retorno.h_funcionamento,
+                    tipo_pagamento: retorno.tipo_pagamento,
+                    hasData: true
+                });
+
+                this.setLogin(retorno.login, retorno.jwt);
             },
             error: (e) => {
-                console.log(e);
-                this.setState({hasError: true});
+                switch(e.status){
+                    case 403:
+                        this.setState({hasError: 403});
+                        break;
+                    default: this.setState({hasError: 500});
+                }
             }
         })
     }
@@ -80,7 +84,7 @@ export default class App extends React.Component {
             getTotal: this.getTotal.bind(this),
             countPedido: this.countPedido.bind(this),
             setLogin: this.setLogin.bind(this),
-            checkLogin: this.checkLogin.bind(this)
+            login: this.state.login
         });
 
         if(this.state.empresa !== null){
@@ -119,15 +123,11 @@ export default class App extends React.Component {
     getLocalData(){
         let pedido = localStorage.getItem('pedido');
         let total = localStorage.getItem('total');
-        let login = localStorage.getItem('login');
         if(pedido != null){
             this.setState({pedido: JSON.parse(pedido)});
         }
         if(total != null){
             this.setState({total: total});
-        }
-        if(login != null){
-            this.setState({login: login});
         }
     }
 
@@ -180,12 +180,13 @@ export default class App extends React.Component {
         return totalItem;
     }
 
-    setLogin(login){
-        this.setState({login: login})
-    }
-
-    checkLogin(){
-        return this.state.login;
+    setLogin(login, jwt){
+        this.setState({login: login});
+        if(typeof jwt === 'undefined'){
+            localStorage.setItem('jwt', false);
+        }else{
+            localStorage.setItem('jwt', jwt);
+        }
     }
 
 }

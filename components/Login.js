@@ -18,18 +18,15 @@ export default class Login extends React.Component {
     static defaultProps = {
         nmSecao: 'Entrar',
         showTitulo: true,
-        listaErro: false
+        erro: false
     }
 
-    componentDidMount(){
-        if(this.props.checkLogin()){
+    componentWillMount(){
+        if(this.props.login){
             hashHistory.replace({pathname: '/cardapio'});
         }
     }
 
-    componentDidUpdate(){
-
-    }
 
     render() {
         return (
@@ -83,19 +80,11 @@ export default class Login extends React.Component {
 
 
     showErro(){
-        let erros = [];
-        if(this.state.listaErro){
-            $(this.state.listaErro).each(() => {
-                if(this.nodeType !== 3){
-                    erros.push($(this).text());
-                }
-            })
+        if(this.state.erro){
             return (
                 <div className="row">
                     <div className="col s12 red-text text-darken-2" style={{textAlign: 'center'}}>
-                        <ul >
-                          {erros.map((item, k)=><li key={k}>{item}</li>)}
-                        </ul>
+                        {this.state.erro}
                     </div>
                 </div>
             )
@@ -117,25 +106,38 @@ export default class Login extends React.Component {
     }
 
 
+    valida(){
+        if(this.state.user.length == 0 || this.state.password.length == 0){
+            this.setState({erro: 'Os campos Email e Senha são obrigatórios!'});
+            return false;
+        }
+
+        return true;
+    }
+
+
     login(){
+
+        if(!this.valida()){
+            return;
+        }
+        this.setState({enviando: true});
+
         $.ajax({
             url: '/api/login',
             type: 'post',
             dataType: 'json',
             data: {user: this.state.user, password: this.state.password},
             success: (retorno) => {
-                localStorage.setItem('jwt', retorno.jwt);
-                this.setState({enviando: false});
-                localStorage.setItem('login', true);
-                this.setState({listaErro: false});
-                this.props.setLogin(true);
+                this.setState({enviando: false, erro: false});
+                this.props.setLogin(true, retorno.jwt);
                 hashHistory.replace({pathname: '/cardapio'});
             },
             error: (e) => {
                 this.setState({enviando: false});
                 switch(e.status){
                     case 403:
-                        this.setState({listaErro: 'Email ou Senha inválidos'});
+                        this.setState({erro: 'Email e/ou Senha inválidos'});
                         break;
                 }
             }

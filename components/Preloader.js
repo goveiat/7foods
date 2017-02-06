@@ -19,7 +19,10 @@ export default class Preloader extends React.Component {
         msg2: 'Só mais alguns instantes...',
         msg3: 'Já está quase pronto...',
         msg4: 'Está demorando mais que o esperado...',
-        msgErro: 'Ocorreu um erro, mas já estamos trabalhando nisso!',
+        msgErro: {
+          403: 'Não foi possível obter os dados da empresa',
+          500: 'Ocorreu um erro, mas já estamos trabalhando nisso!'
+        },
         hasError: false,
         styleContainer: {textAlign: 'center', position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, background: '#fff'},
         styleSpin: {marginTop: '100px'},
@@ -46,7 +49,7 @@ export default class Preloader extends React.Component {
     componentDidUpdate(){
         if(this.props.hasError){
           this.sto.msgErro = setTimeout(() => {
-            this.setState({msg: this.props.msgErro});
+            this.setState({msg: this.props.msgErro[this.props.hasError]});
           }, 6000);
         }
     }
