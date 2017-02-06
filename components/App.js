@@ -183,7 +183,7 @@ export default class App extends React.Component {
     setLogin(login, jwt){
         this.setState({login: login});
         if(typeof jwt === 'undefined'){
-            localStorage.setItem('jwt', false);
+            localStorage.removeItem('jwt');
         }else{
             localStorage.setItem('jwt', jwt);
         }
