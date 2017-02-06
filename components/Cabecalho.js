@@ -40,7 +40,7 @@ export default class Cabecalho extends React.Component {
               <div className="nav-wrapper">
                 {this.getTitulo()}
                 <ul className="right">
-                  <li><a data-activates="slide-out" className="menuLateral"><i className="large material-icons">person</i></a></li>
+                  {this.getMenuLogin()}
                   <li><a data-activates="slide-out" className="menuLateral"><i className="large material-icons">menu</i></a></li>
                 </ul>
                 <ul className="left">
@@ -69,18 +69,26 @@ export default class Cabecalho extends React.Component {
 
     getLinkLogin(){
         if(this.props.login){
-            return (<Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/cardapio"><i className="material-icons">close</i>Sair</Link>);
+            return (<Link onClick={()=>{this.logout()}} to="/cardapio"><i className="material-icons">close</i>Sair</Link>);
         }else{
             return (<Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/entrar"><i className="material-icons">vpn_key</i>Entrar</Link>)
         }
     }
 
     getLinkConta(){
-        if(this.props.login || true){
-            return (<Link onClick={()=>{this.conta();$('.menuLateral').sideNav('hide')}}><i className="material-icons">person</i>Minha Conta</Link>);
+        if(this.props.login){
+            return (<Link onClick={()=>{this.conta()}}><i className="material-icons">person</i>Minha Conta</Link>);
         }else{
             return false;
         }
+    }
+
+    getMenuLogin(){
+      if(this.props.login){
+          return(<li><a data-activates="slide-out" className="menuLateral"><i className="large material-icons">person</i></a></li>);
+      }else{
+          return false;
+      }
     }
 
 
@@ -95,7 +103,14 @@ export default class Cabecalho extends React.Component {
     }
 
 
+    logout(){
+      $('.menuLateral').sideNav('hide');
+      this.props.setLogin(false);
+    }
+
+
     conta(){
+        $('.menuLateral').sideNav('hide')
         $.ajax({
             url: '/api/conta',
             type: 'get',

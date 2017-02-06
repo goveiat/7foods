@@ -50,6 +50,7 @@ export default class Cardapio extends React.Component {
                       opcoes: retorno.opcoes,
                       hasData: true
                     });
+                    this.props.setLogin(retorno.jwt);
                     this.props.setSideBarItens(this.setMenu());
                 }
             },

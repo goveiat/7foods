@@ -51,8 +51,7 @@ export default class App extends React.Component {
                     tipo_pagamento: retorno.tipo_pagamento,
                     hasData: true
                 });
-
-                this.setLogin(retorno.login, retorno.jwt);
+                this.setLogin(retorno.jwt);
             },
             error: (e) => {
                 switch(e.status){
@@ -95,6 +94,7 @@ export default class App extends React.Component {
                         showTitulo={children.props.showTitulo}
                         logo={this.state.empresa.Logo}
                         login={this.state.login}
+                        setLogin={this.setLogin.bind(this)}
                         sidebarItems={this.state.sidebarItems}
                         navStyle={children.props.navStyle} />
                     <Secao img={this.state.empresa.Background} titulo={children.props.nmSecao} />
@@ -146,13 +146,11 @@ export default class App extends React.Component {
         localStorage.setItem('total', total);
     }
 
-
     removeItensPedido(i){
         pedido.splice(i, 1);
         this.setState({pedido: pedido})
         localStorage.setItem('pedido', JSON.stringify(pedido));
     }
-
 
     getPedido(){
         return this.state.pedido;
@@ -180,12 +178,13 @@ export default class App extends React.Component {
         return totalItem;
     }
 
-    setLogin(login, jwt){
-        this.setState({login: login});
-        if(typeof jwt === 'undefined'){
+    setLogin(jwt){
+        if(!jwt){
             localStorage.removeItem('jwt');
+            this.setState({login: false});
         }else{
             localStorage.setItem('jwt', jwt);
+            this.setState({login: true});
         }
     }
 

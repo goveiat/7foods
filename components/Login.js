@@ -130,7 +130,7 @@ export default class Login extends React.Component {
             data: {user: this.state.user, password: this.state.password},
             success: (retorno) => {
                 this.setState({enviando: false, erro: false});
-                this.props.setLogin(true, retorno.jwt);
+                this.props.setLogin(retorno.jwt);
                 hashHistory.replace({pathname: '/cardapio'});
             },
             error: (e) => {
