@@ -21,7 +21,6 @@ export default class Tamanhos extends React.Component {
     }
 
     componentDidMount(){
-        var self = this;
         this.setState({checked: this.props.lista[0]});
         this.props.setTamanho(this.props.lista[0]);
     }

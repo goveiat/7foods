@@ -20,7 +20,6 @@ export default class Opcoes extends React.Component {
     }
 
     componentWillMount(){
-        let self = this;
         let checked = [];
         if(this.props.lista.length > 0){
             this.props.lista.map((item)=>{
@@ -28,13 +27,13 @@ export default class Opcoes extends React.Component {
                     checked.push(item);
                 }
             });
-            self.setState({checked: checked});
-            self.props.setOpcoes(checked)
+            this.setState({checked: checked});
+            this.props.setOpcoes(checked)
         }
     }
 
     componentDidMount(){
-        var self = this;
+
     }
 
     componentDidUpdate(){

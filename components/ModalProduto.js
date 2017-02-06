@@ -21,22 +21,23 @@ export default class ModalProduto extends React.Component {
     }
 
     componentDidMount(){
+        var self = this;
         $('#modalTamanho').modal({
-            ready: () => {
+            ready: function(){
                 $(this).find('.tabs').first().tabs({
-                    onShow: (el) => {
-                        this.setState({abaAtiva: el[0].dataset.index});
+                    onShow: function(el){
+                        self.setState({abaAtiva: el[0].dataset.index});
                     }
                 });
             },
-            complete: () => {
-
+            complete: function(){
+                $(this).find('.tabs').first().tabs('select_tab', 'tab1');
             }
         });
 
     }
 
-    componentDidUpdate(){
+    componentWillReceiveProps(){
 
     }
 
@@ -50,13 +51,13 @@ export default class ModalProduto extends React.Component {
                   </ul>
 
             <div className="modal-content">
-                <div id={"tab1"} data-index="1">
+                <div id="tab1" data-index="1">
                     <Tamanhos lista={this.props.tamanhos} id={this.props.group_id} setTamanho={this.setTamanho.bind(this)} />
                 </div>
-                <div id={"tab2"} data-index="2">
+                <div id="tab2" data-index="2" style={{display: 'none'}}>
                     <Opcoes lista={this.props.opcoes} id={this.props.group_id} setOpcoes={this.setOpcoes.bind(this)} />
                 </div>
-                <div id={"tab3"} data-index="3">
+                <div id="tab3" data-index="3" style={{display: 'none'}}>
                    <div className="card">
                         <div className="card-content">
                             <div className="row">
@@ -115,12 +116,12 @@ export default class ModalProduto extends React.Component {
 
     goProximo(){
         var i = Number(this.state.abaAtiva) + 1;
-        $("#modalTamanho"+' ul.tabs').tabs('select_tab', "tab"+i);
+        $("#modalTamanho ul.tabs").tabs('select_tab', "tab"+i);
     }
 
     goAnterior(){
         var i = this.state.abaAtiva - 1;
-        $("#modalTamanho"+' ul.tabs').tabs('select_tab', "tab"+i);
+        $("#modalTamanho ul.tabs").tabs('select_tab', "tab"+i);
     }
 
 
