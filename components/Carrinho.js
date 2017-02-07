@@ -1,5 +1,6 @@
 import React from 'react';
-
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 
 export default class Carrinho extends React.Component {
 
@@ -8,7 +9,8 @@ export default class Carrinho extends React.Component {
         super(props);
 
         this.state = {
-            pagamento: 0,
+            pagamento: this.props.tipo_pagamento[0],
+            entrega: 'delivery',
         }
     }
 
@@ -20,7 +22,7 @@ export default class Carrinho extends React.Component {
     componentDidMount(){
         var self = this;
         $('.js-carrinho .collapsible').collapsible();
-        $('.js-carrinho  select').material_select();
+
     }
 
     componentDidUpdate(){
@@ -54,26 +56,31 @@ export default class Carrinho extends React.Component {
                         <div className="row">
                             <div className="col s4">Forma de Pagamento</div>
                             <div className="col s8">
-                                <select value={this.state.pagamento} onChange={()=>this.setState({pagamento: item.IDPaymenttype})}>
-                                  <option value={0} disabled>Selecione</option>
-                                  {this.props.tipo_pagamento.map((item, k) =>
-                                    <option key={k} value={item.IDPaymenttype}>{item.Title}</option>
-                                    )}
-                                </select>
+                                 <SelectField
+                                        fullWidth={true}
+                                        value={this.state.pagamento}
+                                        onChange={(event, index, value) => this.setState({pagamento : value})}
+                                    >
+                                      {this.props.tipo_pagamento.map((item, k) =>
+                                        <MenuItem key={k} value={item} primaryText={item.Title} />
+                                      )}
+                                </SelectField>
                             </div>
                         </div>
                         {this.campoTroco()}
                         <div className="row">
                             <div className="col s4">Entrega</div>
                             <div className="col s8">
-                                <select value="0" onChange={()=>{console.log('ooo')}}>
-                                  <option value="0" disabled>Selecione</option>
-                                  <option value="1">Entrega em Domicílio</option>
-                                  <option value="2">Retirar no Estabelecimento</option>
-                                </select>
+                                 <SelectField
+                                        fullWidth={true}
+                                        value={this.state.entrega}
+                                        onChange={(event, index, value) => this.setState({entrega : value})}
+                                    >
+                                      <MenuItem value='delivery' primaryText="Entrega em Domicílio" />
+                                      <MenuItem value='retirada' primaryText="Retirar no Estabelecimento" />
+                                    </SelectField>
                             </div>
                         </div>
-
                     </div>
                   </div>
                 </div>
