@@ -1,6 +1,5 @@
 import React from 'react';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+require('jquery-maskmoney/src/jquery.maskMoney.js');
 
 export default class Carrinho extends React.Component {
 
@@ -10,24 +9,28 @@ export default class Carrinho extends React.Component {
 
         this.state = {
             pagamento: this.props.tipo_pagamento[0],
-            entrega: 'delivery',
+            entrega: this.props.tipoEntrega[0],
+            trocoPara: '0,00'
         }
     }
 
     static defaultProps = {
         nmSecao: 'Carrinho',
         showTitulo: true,
+        tipoEntrega: [
+            {id: 'delivery', label: 'Entrega em Domicílio'},
+            {id: 'retirada', label: 'Retirar no Estabelecimento'}
+        ]
     }
 
     componentDidMount(){
         var self = this;
         $('.js-carrinho .collapsible').collapsible();
-
+        $('.js-carrinho select').material_select();
+        $('.js-carrinho .dropdown-button').dropdown();
+        $('#trocoPara').maskMoney();
     }
 
-    componentDidUpdate(){
-
-    }
 
     render() {
         return (
@@ -56,29 +59,24 @@ export default class Carrinho extends React.Component {
                         <div className="row">
                             <div className="col s4">Forma de Pagamento</div>
                             <div className="col s8">
-                                 <SelectField
-                                        fullWidth={true}
-                                        value={this.state.pagamento}
-                                        onChange={(event, index, value) => this.setState({pagamento : value})}
-                                    >
-                                      {this.props.tipo_pagamento.map((item, k) =>
-                                        <MenuItem key={k} value={item} primaryText={item.Title} />
-                                      )}
-                                </SelectField>
+                              <input className='dropdown-button'  type="text" data-activates='pagamento' value={this.state.pagamento.Title} readOnly={true} />
+                              <ul id='pagamento' className='dropdown-content'>
+                                {this.props.tipo_pagamento.map((item, k) =>
+                                    <li key={k} ><a onClick={() => {this.setState({pagamento: item})}}>{item.Title}</a></li>
+                                  )}
+                              </ul>
                             </div>
                         </div>
                         {this.campoTroco()}
                         <div className="row">
                             <div className="col s4">Entrega</div>
                             <div className="col s8">
-                                 <SelectField
-                                        fullWidth={true}
-                                        value={this.state.entrega}
-                                        onChange={(event, index, value) => this.setState({entrega : value})}
-                                    >
-                                      <MenuItem value='delivery' primaryText="Entrega em Domicílio" />
-                                      <MenuItem value='retirada' primaryText="Retirar no Estabelecimento" />
-                                    </SelectField>
+                              <input className='dropdown-button'  type="text" data-activates='entrega' value={this.state.entrega.label} readOnly={true} />
+                              <ul id='entrega' className='dropdown-content'>
+                                {this.props.tipoEntrega.map((item, k) =>
+                                    <li key={k} ><a onClick={() => {this.setState({entrega: item})}}>{item.label}</a></li>
+                                  )}
+                              </ul>
                             </div>
                         </div>
                     </div>
@@ -92,14 +90,22 @@ export default class Carrinho extends React.Component {
 
 
     campoTroco(){
-        if(this.state.pagamento == 1){
+        if(this.state.pagamento.IDPaymenttype == 1){
             return (
                 <div className="row">
                     <div className="col s4">Troco para</div>
                     <div className="col s8">
-                        <div className="input-field col s6">
-                          <input type="text" className="validate" />
-                        </div>
+                      <input type="text"
+                        id="trocoPara"
+                        data-symbol="R$ "
+                        data-thousands="."
+                        data-decimal=","
+                          onChange={(e) => {
+                            var clean = e.target.value.replace(/\./g,'').replace(/\,/g,'');
+                            var val = Number(clean).formatMoney();
+                            console.log(clean)
+                            this.setState({trocoPara: val})
+                          }} value={this.state.trocoPara} />
                     </div>
                 </div>
             )
