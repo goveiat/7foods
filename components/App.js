@@ -25,6 +25,7 @@ export default class App extends React.Component {
             h_entrega: null,
             h_funcionamento: null,
             tipo_pagamento: null,
+            regioes: null,
             hasData: false,
             login: false,
         }
@@ -49,6 +50,7 @@ export default class App extends React.Component {
                     h_entrega: retorno.h_entrega,
                     h_funcionamento: retorno.h_funcionamento,
                     tipo_pagamento: retorno.tipo_pagamento,
+                    regioes: retorno.regioes,
                     hasData: true
                 });
                 this.setLogin(retorno.jwt);
@@ -75,6 +77,7 @@ export default class App extends React.Component {
             h_entrega: this.state.h_entrega,
             h_funcionamento: this.state.h_funcionamento,
             tipo_pagamento: this.state.tipo_pagamento,
+            regioes: this.state.regioes,
             hasData: this.state.hasData,
             setSideBarItens: this.setSideBarItens.bind(this),
             addItensPedido: this.addItensPedido.bind(this),

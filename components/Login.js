@@ -68,7 +68,7 @@ export default class Login extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col s12" style={{textAlign: 'center'}}>
-                                <a onClick={this.login.bind(this)} className={`waves-effect waves-light btn green darken-2 ${this.state.enviando ? 'disabled' : ''}`}>Entrar</a>
+                                <a onClick={this.login.bind(this)} className={`waves-effect waves-light btn green btn-large darken-2 ${this.state.enviando ? 'disabled' : ''}`}>Entrar</a>
                             </div>
                         </div>
                         {this.showErro()}
