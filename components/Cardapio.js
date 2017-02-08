@@ -40,7 +40,7 @@ export default class Cardapio extends React.Component {
         $.ajax({
             type: 'GET',
             dataType: 'json',
-            url: `api/empresa/${this.props.IDCompany}/produtos`,
+            url: `api/empresa/${this.props._empresa.dados.IDCompany}/produtos`,
             headers: {"Authorization": localStorage.getItem('jwt')},
             success: (retorno) => {
                 if(retorno !== []){

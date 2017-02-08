@@ -10,7 +10,7 @@ export default class Carrinho extends React.Component {
         super(props);
 
         this.state = {
-            pagamento: this.props.tipo_pagamento[0],
+            pagamento: this.props._empresa.tipoPagamento[0],
             entrega: this.props.tipoEntrega[0],
             instantePag: this.props.instantesPag[0],
             dinheiro: 0,
@@ -35,10 +35,9 @@ export default class Carrinho extends React.Component {
         var self = this;
         $('.js-carrinho .collapsible').collapsible();
         $('.js-carrinho select').material_select();
-        $('.js-carrinho .dropdown-button').dropdown();
 
         $('#regioes').autocomplete({
-            data: self.props.regioes.autocomplete,
+            data: self.props._empresa.regioes.autocomplete,
             limit: 20,
         });
         $('.autocomplete-content').on('click', 'li', function(){
@@ -79,7 +78,7 @@ export default class Carrinho extends React.Component {
                                 <DropDown
                                     id="pagamento"
                                     label="Title"
-                                    items={this.props.tipo_pagamento}
+                                    items={this.props._empresa.tipoPagamento}
                                     onSelect={(item) => {this.setPagamento(item)}}
                                 />
                             </div>
@@ -152,7 +151,7 @@ export default class Carrinho extends React.Component {
                 <div className="row">
                     <div className="col s4">Taxa de Entrega</div>
                     <div className="col s5" style={{fontSize: '1rem', marginTop: '10px'}}>{this.state.regiao}</div>
-                    <div className="col s3 secondary-content" style={{textAlign:  'right'}}>R$ {this.props.regioes.valor[this.state.regiao]}</div>
+                    <div className="col s3 secondary-content" style={{textAlign:  'right'}}>R$ {this.props._empresa.regioes.valor[this.state.regiao]}</div>
                 </div>
             )
         }else{

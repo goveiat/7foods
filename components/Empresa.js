@@ -37,23 +37,24 @@ export default class Empresa extends React.Component {
     }
 
     showContainer(){
-        if(this.props.hasData){
+        let {_empresa} = this.props;
+        if(_empresa){
           return (
               <div className="container flow-text">
                 <div className="row">
                   <div className="col l12 s12" style={{margin: '50px 0', textAlign: 'justify'}}>
-                    {this.props.Description}
+                    {_empresa.dados.Description}
                   </div>
                   <div className="col l6 s12">
                     <ul className="collection with-header ">
                         <li className="collection-header"><h4>Entregas</h4></li>
-                        {this.getAgendaSemana(this.props.h_entrega, 'Não Entrega')}
+                        {this.getAgendaSemana(_empresa.hEntrega, 'Não Entrega')}
                     </ul>
                   </div>
                   <div className="col l6 s12">
                     <ul className="collection with-header">
                         <li className="collection-header"><h4>Funcionamento</h4></li>
-                        {this.getAgendaSemana(this.props.h_funcionamento, 'Não Abrimos')}
+                        {this.getAgendaSemana(_empresa.hFuncionamento, 'Não Abrimos')}
                     </ul>
                   </div>
                   <div className="col l12 s12">
@@ -61,7 +62,7 @@ export default class Empresa extends React.Component {
                         <li className="collection-header"><h4>Fale Conosco</h4></li>
                         <li className="collection-item">
                             E-mail
-                            <div className="secondary-content">{this.props.Email}</div>
+                            <div className="secondary-content">{_empresa.dados.Email}</div>
                         </li>
                         {this.getEndereco()}
                     </ul>
@@ -76,7 +77,7 @@ export default class Empresa extends React.Component {
 
 
     getEndereco(){
-      var {enderecos} = this.props;
+      var {enderecos} = this.props._empresa;
       return (
           Object.keys(enderecos).map((k, i) =>
                <li className="collection-item" key={i}>

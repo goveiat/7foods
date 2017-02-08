@@ -16,18 +16,13 @@ export default class App extends React.Component {
         super(props);
 
         this.state = {
-            empresa: null,
+            _empresa: false,
             hasError: false,
             sidebarItems: false,
             pedido: [],
             total: 0,
-            enderecos: null,
-            h_entrega: null,
-            h_funcionamento: null,
-            tipo_pagamento: null,
-            regioes: null,
-            hasData: false,
             login: false,
+            cliente: null
         }
     }
 
@@ -44,16 +39,9 @@ export default class App extends React.Component {
             url: '/api/empresa/ligchina',
             headers: {"Authorization": localStorage.getItem('jwt')},
             success: (retorno) => {
-                this.setState({
-                    empresa: retorno.empresa,
-                    enderecos: retorno.enderecos,
-                    h_entrega: retorno.h_entrega,
-                    h_funcionamento: retorno.h_funcionamento,
-                    tipo_pagamento: retorno.tipo_pagamento,
-                    regioes: retorno.regioes,
-                    hasData: true
-                });
-                this.setLogin(retorno.jwt);
+                this.setLogin(retorno.login);
+                delete retorno.login;
+                this.setState({_empresa: retorno});
             },
             error: (e) => {
                 switch(e.status){
@@ -72,13 +60,7 @@ export default class App extends React.Component {
 
     render(){
         var children = React.cloneElement(this.props.children, {
-            ...this.state.empresa,
-            enderecos: this.state.enderecos,
-            h_entrega: this.state.h_entrega,
-            h_funcionamento: this.state.h_funcionamento,
-            tipo_pagamento: this.state.tipo_pagamento,
-            regioes: this.state.regioes,
-            hasData: this.state.hasData,
+            _empresa: this.state._empresa,
             setSideBarItens: this.setSideBarItens.bind(this),
             addItensPedido: this.addItensPedido.bind(this),
             removeItensPedido: this.removeItensPedido.bind(this),
@@ -89,18 +71,18 @@ export default class App extends React.Component {
             login: this.state.login
         });
 
-        if(this.state.empresa !== null){
+        if(this.state._empresa){
             return (
                 <div>
                     <Cabecalho
-                        titulo={this.state.empresa.Name}
+                        titulo={this.state._empresa.dados.Name}
                         showTitulo={children.props.showTitulo}
-                        logo={this.state.empresa.Logo}
+                        logo={this.state._empresa.dados.Logo}
                         login={this.state.login}
                         setLogin={this.setLogin.bind(this)}
                         sidebarItems={this.state.sidebarItems}
                         navStyle={children.props.navStyle} />
-                    <Secao img={this.state.empresa.Background} titulo={children.props.nmSecao} />
+                    <Secao img={this.state._empresa.dados.Background} titulo={children.props.nmSecao} />
                     {children}
                     <Rodape />
                 </div>

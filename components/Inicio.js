@@ -16,10 +16,11 @@ export default class Inicio extends React.Component {
             animeBtnEmpresa: ''
         }
 
+
         this.styles = {
             logo : {width: '300px', marginLeft: 'auto',  'marginRight': 'auto', display: 'block', opacity: '0', marginTop: '25px'},
             fullscreen : {
-                background: `url('http://ligchina.a2${this.props.Background}')`,
+                background: `url('http://ligchina.a2${this.props._empresa.dados.Background}')`,
                 overflowX: 'hidden',
                 overflowY: 'hidden',
                 backgroundSize: 'cover',
@@ -89,9 +90,9 @@ export default class Inicio extends React.Component {
             <div style={this.styles.fullscreen}>
                 <h1>
                     <div className={'white-text ' + this.state.animeBemvindo} style={this.styles.titulo1}>Bem Vindo</div>
-                    <div className={'white-text ' + this.state.animeNomeEmpresa} style={this.styles.titulo2}>ao {this.props.Name} </div>
+                    <div className={'white-text ' + this.state.animeNomeEmpresa} style={this.styles.titulo2}>ao {this.props._empresa.dados.Name} </div>
                 </h1>
-                <img className={'z-depth-5 ' +this.state.animeLogo} src={`http://ligchina.a2${this.props.Logo}`} style={this.styles.logo}  />
+                <img className={'z-depth-5 ' +this.state.animeLogo} src={`http://ligchina.a2${this.props._empresa.dados.Logo}`} style={this.styles.logo}  />
                 <Link to="/cardapio"><button style={this.styles.botaoCardapio} className={"waves-effect waves-light btn-large " + this.state.animeBtnCardapio}>Ver cardápio</button></Link>
                 <Link to="/empresa"><button style={this.styles.botaoEmpresa} className={"waves-effect waves-light btn-large " + this.state.animeBtnEmpresa}>Conhecer a Empresa</button></Link>
             </div>
