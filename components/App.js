@@ -17,12 +17,12 @@ export default class App extends React.Component {
 
         this.state = {
             _empresa: false,
+            _cliente: false,
             hasError: false,
             sidebarItems: false,
             pedido: [],
             total: 0,
             login: false,
-            cliente: null
         }
     }
 
@@ -41,8 +41,10 @@ export default class App extends React.Component {
             headers: {"Authorization": localStorage.getItem('jwt')},
             success: (retorno) => {
                 this.setLogin(retorno.login);
-                delete retorno.login;
-                this.setState({_empresa: retorno});
+                if(retorno.login){
+                    this.setState({_cliente: retorno.cliente});
+                }
+                this.setState({_empresa: retorno.empresa});
             },
             error: (e) => {
                 switch(e.status){
@@ -172,6 +174,10 @@ export default class App extends React.Component {
                 return this.state.pedido.length;
             }
         }
+    }
+
+    handleCliente(){
+
     }
 
 }
