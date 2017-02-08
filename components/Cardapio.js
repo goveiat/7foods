@@ -78,7 +78,7 @@ export default class Cardapio extends React.Component {
 
     addModal(){
         if(this.state.produtoSelecionado != null){
-            return (<ModalProduto {...this.state.produtoSelecionado}  addItensPedido={this.props.addItensPedido} opcoes={this.state.opcoes[this.state.produtoSelecionado.IDProduct]} />);
+            return (<ModalProduto {...this.state.produtoSelecionado}  pedido={this.props.pedido} opcoes={this.state.opcoes[this.state.produtoSelecionado.IDProduct]} />);
         }else{
             return false;
         }
@@ -93,7 +93,7 @@ export default class Cardapio extends React.Component {
                         <Link to="/carrinho" className="btn-floating btn-large waves-effect waves-light"  >
                             <i className="material-icons">shopping_cart</i>
                         </Link>
-                        <span style={this.styles.counter}>{this.props.countPedido()}</span>
+                        <span style={this.styles.counter}>{this.props.pedido.count()}</span>
                     </div>
 
               </div>

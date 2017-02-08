@@ -31,6 +31,7 @@ export default class App extends React.Component {
     }
 
     componentDidMount(){
+        this.handlePedido();
         this.getLocalData();
 
         $.ajax({
@@ -61,14 +62,10 @@ export default class App extends React.Component {
     render(){
         var children = React.cloneElement(this.props.children, {
             _empresa: this.state._empresa,
+            pedido: this.pedido,
+            login: this.state.login,
             setSideBarItens: this.setSideBarItens.bind(this),
-            addItensPedido: this.addItensPedido.bind(this),
-            removeItensPedido: this.removeItensPedido.bind(this),
-            getPedido: this.getPedido.bind(this),
-            getTotal: this.getTotal.bind(this),
-            countPedido: this.countPedido.bind(this),
             setLogin: this.setLogin.bind(this),
-            login: this.state.login
         });
 
         if(this.state._empresa){
@@ -122,34 +119,6 @@ export default class App extends React.Component {
     }
 
 
-    addItensPedido(item){
-        item.total = this.calcTotalItem(item);
-        let pedido = [item, ...this.state.pedido];
-        let total = Number(this.state.total) + Number(item.total);
-        this.setState({pedido: pedido, total: total});
-        localStorage.setItem('pedido', JSON.stringify(pedido));
-        localStorage.setItem('total', total);
-    }
-
-    removeItensPedido(i){
-        pedido.splice(i, 1);
-        this.setState({pedido: pedido})
-        localStorage.setItem('pedido', JSON.stringify(pedido));
-    }
-
-    getPedido(){
-        return this.state.pedido;
-    }
-
-    getTotal(){
-        return Number(this.state.total).toFixed(2);
-    }
-
-    countPedido(){
-        return this.state.pedido.length;
-    }
-
-
     calcTotalItem(item){
         let totalItem = Number(item.qtd) * Number(item.tamanho.valor);
         let totalOp = 0;
@@ -170,6 +139,38 @@ export default class App extends React.Component {
         }else{
             localStorage.setItem('jwt', jwt);
             this.setState({login: true});
+        }
+    }
+
+
+    handlePedido(){
+        this.pedido = {
+            add: (item) => {
+                item.total = this.calcTotalItem(item);
+                let pedido = [item, ...this.state.pedido];
+                let total = Number(this.state.total) + Number(item.total);
+                this.setState({pedido: pedido, total: total});
+                localStorage.setItem('pedido', JSON.stringify(pedido));
+                localStorage.setItem('total', total);
+            },
+
+            remove: (i) => {
+                pedido.splice(i, 1);
+                this.setState({pedido: pedido})
+                localStorage.setItem('pedido', JSON.stringify(pedido));
+            },
+
+            get: () => {
+                return this.state.pedido;
+            },
+
+            total: () => {
+                return Number(this.state.total).toFixed(2);
+            },
+
+            count: () => {
+                return this.state.pedido.length;
+            }
         }
     }
 

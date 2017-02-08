@@ -59,18 +59,18 @@ export default class Carrinho extends React.Component {
     }
 
     showData(){
-        if(this.props.countPedido() > 0){
+        if(this.props.pedido.count() > 0){
           return (
                 <div style={{paddingTop: '50px'}} className="flow-text">
                     <ul className="collapsible" data-collapsible="expandable">
-                        {this.props.getPedido().map(this.showPedido.bind(this))}
+                        {this.props.pedido.get().map(this.showPedido.bind(this))}
                       </ul>
 
                   <div className="card z-depth-2">
                     <div className="card-content">
                         <div className="row">
                             <div className="col s4">Total em Produtos</div>
-                            <div className="col s8 secondary-content" style={{textAlign:  'right'}}>R$ {this.props.getTotal()}</div>
+                            <div className="col s8 secondary-content" style={{textAlign:  'right'}}>R$ {this.props.pedido.total()}</div>
                         </div>
                         <div className="row">
                             <div className="col s4">Forma de Pagamento</div>
