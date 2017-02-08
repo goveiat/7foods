@@ -14,7 +14,8 @@ export default class Carrinho extends React.Component {
             entrega: this.props.tipoEntrega[0],
             instantePag: this.props.instantesPag[0],
             dinheiro: 0,
-            regiao: null,
+            regiao: this.props._cliente ? this.props._cliente.enderecos[0].key : false,
+            endereco: this.props._cliente ? this.props._cliente.enderecos[0] : false
         }
     }
 
@@ -107,12 +108,33 @@ export default class Carrinho extends React.Component {
     }
 
 
+    showEnderecos(){
+        if(this.state.entrega.id == 'delivery'){
+            return (
+                <div className="row">
+                    <div className="col s4">Endereço de Entrega</div>
+                    <div className="col s8">
+                        <DropDown
+                            id="enderecos"
+                            label="label"
+                            items={this.props._cliente.enderecos}
+                            onSelect={(item) => {this.setState({endereco: item, regiao: item.key})}}
+                        />
+                    </div>
+                </div>
+            )
+        }else{
+            return false;
+        }
+    }
+
+
     showCheckout(){
-        if(this.props.login){
+        if(this.props._cliente){
             return (
                 <div  className="card z-depth-2 flow-text">
                     <div className="card-content">
-
+                        {this.showEnderecos()}
                     </div>
                 </div>
             )
@@ -141,19 +163,29 @@ export default class Carrinho extends React.Component {
         if(item.id == 'delivery'){
             this.setState({entrega: item});
         }else{
-            this.setState({regiao: null, entrega: item});
+            this.setState({regiao: false, entrega: item});
         }
     }
 
     campoTaxa(){
-        if(this.state.regiao != null){
-            return (
-                <div className="row">
-                    <div className="col s4">Taxa de Entrega</div>
-                    <div className="col s5" style={{fontSize: '1rem', marginTop: '10px'}}>{this.state.regiao}</div>
-                    <div className="col s3 secondary-content" style={{textAlign:  'right'}}>R$ {this.props._empresa.regioes.valor[this.state.regiao]}</div>
-                </div>
-            )
+        if(this.state.regiao){
+            if (this.state.regiao in this.props._empresa.regioes.valor){
+                return (
+                    <div className="row">
+                        <div className="col s4">Taxa de Entrega</div>
+                        <div className="col s5" style={{fontSize: '1rem', marginTop: '10px'}}>{this.state.regiao}</div>
+                        <div className="col s3 secondary-content" style={{textAlign:  'right'}}>R$ {this.props._empresa.regioes.valor[this.state.regiao]}</div>
+                    </div>
+                )
+            }else{
+                return (
+                    <div className="row">
+                        <div className="col s4">Taxa de Entrega</div>
+                        <div className="col s8 secondary-content">Fora da região de Entrega</div>
+                    </div>
+                )
+            }
+
         }else{
             return false;
         }

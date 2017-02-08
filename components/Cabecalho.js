@@ -68,7 +68,7 @@ export default class Cabecalho extends React.Component {
 
 
     getLinkLogin(){
-        if(this.props.login){
+        if(this.props._cliente){
             return (<Link onClick={()=>{this.logout()}} to="/cardapio"><i className="material-icons">close</i>Sair</Link>);
         }else{
             return (<Link onClick={()=>{$('.menuLateral').sideNav('hide')}} to="/entrar"><i className="material-icons">vpn_key</i>Entrar</Link>)
@@ -76,7 +76,7 @@ export default class Cabecalho extends React.Component {
     }
 
     getLinkConta(){
-        if(this.props.login){
+        if(this.props._cliente){
             return (<Link onClick={()=>{this.conta()}}><i className="material-icons">person</i>Minha Conta</Link>);
         }else{
             return false;
@@ -84,7 +84,7 @@ export default class Cabecalho extends React.Component {
     }
 
     getMenuLogin(){
-      if(this.props.login){
+      if(this.props._cliente){
           return(<li><a data-activates="slide-out" className="menuLateral"><i className="large material-icons">person</i></a></li>);
       }else{
           return false;
@@ -105,7 +105,7 @@ export default class Cabecalho extends React.Component {
 
     logout(){
       $('.menuLateral').sideNav('hide');
-      this.props.setLogin(false);
+      this.props.setCliente(false);
     }
 
 

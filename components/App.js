@@ -22,7 +22,6 @@ export default class App extends React.Component {
             sidebarItems: false,
             pedido: [],
             total: 0,
-            login: false,
         }
     }
 
@@ -40,10 +39,7 @@ export default class App extends React.Component {
             url: '/api/empresa/ligchina',
             headers: {"Authorization": localStorage.getItem('jwt')},
             success: (retorno) => {
-                this.setLogin(retorno.login);
-                if(retorno.login){
-                    this.setState({_cliente: retorno.cliente});
-                }
+                this.setCliente(retorno.cliente);
                 this.setState({_empresa: retorno.empresa});
             },
             error: (e) => {
@@ -64,10 +60,10 @@ export default class App extends React.Component {
     render(){
         var children = React.cloneElement(this.props.children, {
             _empresa: this.state._empresa,
+            _cliente: this.state._cliente,
             pedido: this.pedido,
-            login: this.state.login,
             setSideBarItens: this.setSideBarItens.bind(this),
-            setLogin: this.setLogin.bind(this),
+            setCliente: this.setCliente.bind(this),
         });
 
         if(this.state._empresa){
@@ -77,8 +73,8 @@ export default class App extends React.Component {
                         titulo={this.state._empresa.dados.Name}
                         showTitulo={children.props.showTitulo}
                         logo={this.state._empresa.dados.Logo}
-                        login={this.state.login}
-                        setLogin={this.setLogin.bind(this)}
+                        _cliente={this.state._cliente}
+                        setCliente={this.setCliente.bind(this)}
                         sidebarItems={this.state.sidebarItems}
                         navStyle={children.props.navStyle} />
                     <Secao img={this.state._empresa.dados.Background} titulo={children.props.nmSecao} />
@@ -121,26 +117,14 @@ export default class App extends React.Component {
     }
 
 
-    calcTotalItem(item){
-        let totalItem = Number(item.qtd) * Number(item.tamanho.valor);
-        let totalOp = 0;
-        if(item.opcoes != null && item.opcoes.length > 0){
-            item.opcoes.map((op)=>{
-                totalOp += Number(op.Value);
-            });
-            totalOp *= Number(item.qtd);
-            totalItem += Number(totalOp);
-        }
-        return totalItem;
-    }
 
-    setLogin(jwt){
-        if(!jwt){
+    setCliente(cliente){
+        if(!cliente){
             localStorage.removeItem('jwt');
-            this.setState({login: false});
+            this.setState({_cliente: false});
         }else{
-            localStorage.setItem('jwt', jwt);
-            this.setState({login: true});
+            localStorage.setItem('jwt', cliente.token);
+            this.setState({_cliente: cliente});
         }
     }
 
@@ -148,7 +132,7 @@ export default class App extends React.Component {
     handlePedido(){
         this.pedido = {
             add: (item) => {
-                item.total = this.calcTotalItem(item);
+                item.total = this.pedido.totalItem(item);
                 let pedido = [item, ...this.state.pedido];
                 let total = Number(this.state.total) + Number(item.total);
                 this.setState({pedido: pedido, total: total});
@@ -172,6 +156,19 @@ export default class App extends React.Component {
 
             count: () => {
                 return this.state.pedido.length;
+            },
+
+            totalItem: (item) => {
+                let totalItem = Number(item.qtd) * Number(item.tamanho.valor);
+                let totalOp = 0;
+                if(item.opcoes != null && item.opcoes.length > 0){
+                    item.opcoes.map((op)=>{
+                        totalOp += Number(op.Value);
+                    });
+                    totalOp *= Number(item.qtd);
+                    totalItem += Number(totalOp);
+                }
+                return totalItem;
             }
         }
     }

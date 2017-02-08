@@ -22,7 +22,7 @@ export default class Login extends React.Component {
     }
 
     componentWillMount(){
-        if(this.props.login){
+        if(this.props._cliente){
             hashHistory.replace({pathname: '/cardapio'});
         }
     }
@@ -130,7 +130,7 @@ export default class Login extends React.Component {
             data: {user: this.state.user, password: this.state.password},
             success: (retorno) => {
                 this.setState({enviando: false, erro: false});
-                this.props.setLogin(retorno.jwt);
+                this.props.setCliente(retorno);
                 hashHistory.replace({pathname: '/cardapio'});
             },
             error: (e) => {
