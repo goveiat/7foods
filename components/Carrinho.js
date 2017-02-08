@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
-require('jquery-maskmoney/src/jquery.maskMoney.js');
+import DropDown from './DropDown';
+import SimpleCurrencyInput from 'react-simple-currency';
 
 export default class Carrinho extends React.Component {
 
@@ -21,7 +22,7 @@ export default class Carrinho extends React.Component {
         nmSecao: 'Carrinho',
         showTitulo: true,
         tipoEntrega: [
-            {id: 'delivery', label: 'Entrega em Domicílio'},
+            {id: 'delivery', label: 'Em Domicílio (Delivery)'},
             {id: 'retirada', label: 'Retirar no Estabelecimento'}
         ],
         instantesPag: [
@@ -35,9 +36,7 @@ export default class Carrinho extends React.Component {
         $('.js-carrinho .collapsible').collapsible();
         $('.js-carrinho select').material_select();
         $('.js-carrinho .dropdown-button').dropdown();
-        $('#trocoPara').maskMoney().on('keyup', function() {
-            self.setState({dinheiro: $(this).val()});
-        });
+
         $('#regioes').autocomplete({
             data: self.props.regioes.autocomplete,
             limit: 20,
@@ -77,24 +76,24 @@ export default class Carrinho extends React.Component {
                         <div className="row">
                             <div className="col s4">Forma de Pagamento</div>
                             <div className="col s8">
-                              <input className='dropdown-button'  type="text" data-activates='pagamento' value={this.state.pagamento.Title} readOnly={true} />
-                              <ul id='pagamento' className='dropdown-content'>
-                                {this.props.tipo_pagamento.map((item, k) =>
-                                    <li key={k} ><a onClick={() => {this.setPagamento(item)}}>{item.Title}</a></li>
-                                  )}
-                              </ul>
+                                <DropDown
+                                    id="pagamento"
+                                    label="Title"
+                                    items={this.props.tipo_pagamento}
+                                    onSelect={(item) => {this.setPagamento(item)}}
+                                />
                             </div>
                         </div>
                         {this.campoTroco()}
                         <div className="row">
-                            <div className="col s4">Entrega</div>
+                            <div className="col s4">Forma de Entrega</div>
                             <div className="col s8">
-                              <input className='dropdown-button'  type="text" data-activates='entrega' value={this.state.entrega.label} readOnly={true} />
-                              <ul id='entrega' className='dropdown-content'>
-                                {this.props.tipoEntrega.map((item, k) =>
-                                    <li key={k} ><a onClick={() => {this.setEntrega(item)}}>{item.label}</a></li>
-                                  )}
-                              </ul>
+                                <DropDown
+                                    id="entrega"
+                                    label="label"
+                                    items={this.props.tipoEntrega}
+                                    onSelect={(item) => {this.setEntrega(item)}}
+                                />
                             </div>
                         </div>
                         {this.campoRegioes()}
@@ -114,15 +113,7 @@ export default class Carrinho extends React.Component {
             return (
                 <div  className="card z-depth-2 flow-text">
                     <div className="card-content">
-                        <div className="row">
-                            <div className="col s4">Instante do Pagamento</div>
-                            <div className="col s8">
-                              <input className='dropdown-button'  type="text" data-activates='instantePag' value={this.state.instantePag.label} readOnly={true} />
-                              <ul id='instantePag' className='dropdown-content'>
-                                {this.showOpcoesInstPag()}
-                              </ul>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             )
@@ -176,7 +167,7 @@ export default class Carrinho extends React.Component {
                 <div className="row">
                     <div className="col s4">Regiões de Entrega</div>
                     <div className="col s8">
-                          <input type="text" id="regioes" />
+                          <input placeholder="Informe o Bairro" type="text" id="regioes" />
                     </div>
                 </div>
             )
@@ -186,35 +177,42 @@ export default class Carrinho extends React.Component {
     }
 
     campoTroco(){
+        var self = this;
         if(this.state.pagamento.IDPaymenttype == 1){
             return (
                 <div className="row">
                     <div className="col s4">Troco para</div>
                     <div className="col s8">
-                      <input type="text"
-                        placeholder="0,00"
-                        id="trocoPara"
-                        data-thousands="."
-                        data-decimal=","  />
+                        <SimpleCurrencyInput
+                          value={this.state.dinheiro}
+                          precision={2}
+                          separator=','
+                          delimiter='.'
+                          unit='R$'
+                          onInputChange={(raw, display) => {this.setState({dinheiro: raw})}}
+                        />
                     </div>
                 </div>
             )
         }else{
-            return false;
+            return (
+                <div className="row">
+                    <div className="col s4">Instante do Pagamento</div>
+                    <div className="col s8">
+                    <DropDown
+                        id="instPag"
+                        label="label"
+                        items={this.props.instantesPag}
+                        onSelect={(item) => {this.setState({instantePag: item})}}
+                    />
+                    </div>
+                </div>
+            );
         }
     }
 
 
-    showOpcoesInstPag(){
-        if(this.state.pagamento.IDPaymenttype == 1){
-            let item = this.props.instantesPag[0];
-            return (<li ><a onClick={() => {this.setState({instantePag: item})}}>{item.label}</a></li>);
-        }else{
-            return this.props.instantesPag.map((item, k) =>
-                <li key={k} ><a onClick={() => {this.setState({instantePag: item})}}>{item.label}</a></li>
-            )
-        }
-    }
+
 
 
     showPedido(item, k){
