@@ -18,7 +18,6 @@ export default class App extends React.Component {
         this.state = {
             _empresa: false,
             _cliente: false,
-            _produtos: false,
             hasError: false,
             sidebarItems: false,
             pedido: [],
@@ -79,6 +78,10 @@ export default class App extends React.Component {
             case 'Inicio':
             case 'Empresa':
             case 'Login':
+                props = {
+                    _empresa: this.state._empresa,
+                    setCliente: this.setCliente.bind(this),
+                }; break;
             case 'NotFound':
                 props = {
                     _empresa: this.state._empresa,
@@ -86,14 +89,13 @@ export default class App extends React.Component {
             case 'Cardapio':
                 props = {
                     _empresa: this.state._empresa,
-                    _produtos: this.state._produtos,
                     setSideBarItens: this.setSideBarItens.bind(this),
                     handlePedido: this.handlePedido,
                     setCliente: this.setCliente.bind(this),
-                    setProdutos: this.setProdutos.bind(this),
                 }; break;
             case 'Carrinho':
                 props = {
+                    _cliente: this.state._cliente,
                     _empresa: this.state._empresa,
                     handlePedido: this.handlePedido,
                 }; break;
@@ -165,9 +167,6 @@ export default class App extends React.Component {
         }
     }
 
-    setProdutos(prod){
-        this.setState({_produtos: prod});
-    }
 
 
     nsPedido(){
@@ -182,6 +181,7 @@ export default class App extends React.Component {
             },
 
             remove: (i) => {
+                let pedido = this.state.pedido;
                 pedido.splice(i, 1);
                 this.setState({pedido: pedido})
                 localStorage.setItem('pedido', JSON.stringify(pedido));

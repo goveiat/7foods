@@ -11,6 +11,10 @@ export default class Cardapio extends React.Component {
         super(props);
 
         this.state = {
+          categorias: null,
+          variedades: null,
+          opcoes: null,
+          hasData: false,
           hasError: false,
           produtoSelecionado: null
         }
@@ -33,9 +37,24 @@ export default class Cardapio extends React.Component {
               </div>
             </li>);
 
-        if(!this.props._produtos){
+
+        let produtos = sessionStorage.getItem('produtos');
+        if(produtos != null){
+            produtos = JSON.parse(produtos);
+            this.setState({
+              categorias: produtos.categorias,
+              variedades: produtos.variedades,
+              opcoes: produtos.opcoes,
+              hasData: true
+            });
+
+            this.props.setSideBarItens(this.setMenu());
+        }else{
             this.xhrProdutos();
         }
+
+
+
     }
 
     componentWillUnmount(){
@@ -52,6 +71,7 @@ export default class Cardapio extends React.Component {
     }
 
     xhrProdutos(){
+
         $.ajax({
             type: 'GET',
             dataType: 'json',
@@ -59,9 +79,15 @@ export default class Cardapio extends React.Component {
             headers: {"Authorization": localStorage.getItem('jwt')},
             success: (retorno) => {
                 if(retorno !== []){
-                    this.props.setProdutos(retorno.produtos);
+                    this.setState({
+                      categorias: retorno.produtos.categorias,
+                      variedades: retorno.produtos.variedades,
+                      opcoes: retorno.produtos.opcoes,
+                      hasData: true
+                    });
                     this.props.setCliente(retorno.cliente);
                     this.props.setSideBarItens(this.setMenu());
+                    sessionStorage.setItem('produtos', JSON.stringify(retorno.produtos));
                 }
             },
             error: (e) => {
@@ -73,17 +99,17 @@ export default class Cardapio extends React.Component {
 
     addModal(){
         if(this.state.produtoSelecionado != null){
-            return (<ModalProduto {...this.state.produtoSelecionado}  handlePedido={this.props.handlePedido} opcoes={this.props._produtos.variedades[this.state.produtoSelecionado.IDProduct]} />);
+            return (<ModalProduto {...this.state.produtoSelecionado}  handlePedido={this.props.handlePedido} opcoes={this.state.opcoes[this.state.produtoSelecionado.IDProduct]} />);
         }else{
             return false;
         }
     }
 
     showContainer(){
-        if(this.props._produtos){
+        if(this.state.hasData){
           return (
               <div className="container">
-                    {Object.keys(this.props._produtos.categorias).map(this.showCateg.bind(this)) }
+                    {Object.keys(this.state.categorias).map(this.showCateg.bind(this)) }
                     <div style={{position: 'fixed', bottom: '20px', right: '20px'}}>
                         <Link to="/carrinho" className="btn-floating btn-large waves-effect waves-light"  >
                             <i className="material-icons">shopping_cart</i>
@@ -103,13 +129,13 @@ export default class Cardapio extends React.Component {
         return (
             <div key={k} className="section scrollspy" id={this.seo(item)}>
                 <h2  style={{fontWeight: '200'}} >{item}</h2>
-                {this.props._produtos.categorias[item].produtos.map(this.showProduto.bind(this))}
+                {this.state.categorias[item].produtos.map(this.showProduto.bind(this))}
             </div>
         )
     }
 
     showProduto(item, k){
-        if(!(item.IDProduct in this.props._produtos.variedades)){
+        if(!(item.IDProduct in this.state.variedades)){
             return false;
         }
 
@@ -117,7 +143,7 @@ export default class Cardapio extends React.Component {
             <div key={k}>
                 <h3>{item.Name}</h3>
                 <div className="row">
-                {this.props._produtos.variedades[item.IDProduct].map(this.showVariedade.bind(this))}
+                {this.state.variedades[item.IDProduct].map(this.showVariedade.bind(this))}
                 </div>
             </div>
         )
@@ -154,9 +180,9 @@ export default class Cardapio extends React.Component {
     setMenu(){
         let self = this;
         let li = [];
-        Object.keys(this.props._produtos.categorias).map((categ, k)=>{
+        Object.keys(this.state.categorias).map((categ, k)=>{
             li.push(<li key={k}><a className="subheader">{categ}</a></li>);
-            self.props._produtos.categorias[categ].produtos.map((prod, k2)=>{
+            self.state.categorias[categ].produtos.map((prod, k2)=>{
                 li.push(<li key={'c'+k+'p'+k2}><a className="waves-effect" href="#!">{prod.Name}</a></li>)
             })
         })
