@@ -11,10 +11,6 @@ export default class Cardapio extends React.Component {
         super(props);
 
         this.state = {
-          categorias: null,
-          variedades: null,
-          opcoes: null,
-          hasData: false,
           hasError: false,
           produtoSelecionado: null
         }
@@ -37,34 +33,13 @@ export default class Cardapio extends React.Component {
               </div>
             </li>);
 
-        $.ajax({
-            type: 'GET',
-            dataType: 'json',
-            url: `api/empresa/${this.props._empresa.dados.IDCompany}/produtos`,
-            headers: {"Authorization": localStorage.getItem('jwt')},
-            success: (retorno) => {
-                if(retorno !== []){
-                    this.setState({
-                      categorias: retorno.categorias,
-                      variedades: retorno.variedades,
-                      opcoes: retorno.opcoes,
-                      hasData: true
-                    });
-                    this.props.setCliente(retorno.cliente);
-                    this.props.setSideBarItens(this.setMenu());
-                }
-            },
-            error: (e) => {
-                console.error(e.responseText)
-                this.setState({hasError: true});
-            }
-        });
-
-
+        if(!this.props._produtos){
+            this.xhrProdutos();
+        }
     }
 
-    componentDidUpdate(){
-
+    componentWillUnmount(){
+        this.props.setSideBarItens([]);
     }
 
     render() {
@@ -76,24 +51,44 @@ export default class Cardapio extends React.Component {
         )
     }
 
+    xhrProdutos(){
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: `api/empresa/${this.props._empresa.dados.IDCompany}/produtos`,
+            headers: {"Authorization": localStorage.getItem('jwt')},
+            success: (retorno) => {
+                if(retorno !== []){
+                    this.props.setProdutos(retorno.produtos);
+                    this.props.setCliente(retorno.cliente);
+                    this.props.setSideBarItens(this.setMenu());
+                }
+            },
+            error: (e) => {
+                console.error(e.responseText)
+                this.setState({hasError: true});
+            }
+        });
+    }
+
     addModal(){
         if(this.state.produtoSelecionado != null){
-            return (<ModalProduto {...this.state.produtoSelecionado}  pedido={this.props.pedido} opcoes={this.state.opcoes[this.state.produtoSelecionado.IDProduct]} />);
+            return (<ModalProduto {...this.state.produtoSelecionado}  handlePedido={this.props.handlePedido} opcoes={this.props._produtos.variedades[this.state.produtoSelecionado.IDProduct]} />);
         }else{
             return false;
         }
     }
 
     showContainer(){
-        if(this.state.hasData){
+        if(this.props._produtos){
           return (
               <div className="container">
-                    {Object.keys(this.state.categorias).map(this.showCateg.bind(this)) }
+                    {Object.keys(this.props._produtos.categorias).map(this.showCateg.bind(this)) }
                     <div style={{position: 'fixed', bottom: '20px', right: '20px'}}>
                         <Link to="/carrinho" className="btn-floating btn-large waves-effect waves-light"  >
                             <i className="material-icons">shopping_cart</i>
                         </Link>
-                        <span style={this.styles.counter}>{this.props.pedido.count()}</span>
+                        <span style={this.styles.counter}>{this.props.handlePedido.count()}</span>
                     </div>
 
               </div>
@@ -108,13 +103,13 @@ export default class Cardapio extends React.Component {
         return (
             <div key={k} className="section scrollspy" id={this.seo(item)}>
                 <h2  style={{fontWeight: '200'}} >{item}</h2>
-                {this.state.categorias[item].produtos.map(this.showProduto.bind(this))}
+                {this.props._produtos.categorias[item].produtos.map(this.showProduto.bind(this))}
             </div>
         )
     }
 
     showProduto(item, k){
-        if(!(item.IDProduct in this.state.variedades)){
+        if(!(item.IDProduct in this.props._produtos.variedades)){
             return false;
         }
 
@@ -122,7 +117,7 @@ export default class Cardapio extends React.Component {
             <div key={k}>
                 <h3>{item.Name}</h3>
                 <div className="row">
-                {this.state.variedades[item.IDProduct].map(this.showVariedade.bind(this))}
+                {this.props._produtos.variedades[item.IDProduct].map(this.showVariedade.bind(this))}
                 </div>
             </div>
         )
@@ -159,9 +154,9 @@ export default class Cardapio extends React.Component {
     setMenu(){
         let self = this;
         let li = [];
-        Object.keys(this.state.categorias).map((categ, k)=>{
+        Object.keys(this.props._produtos.categorias).map((categ, k)=>{
             li.push(<li key={k}><a className="subheader">{categ}</a></li>);
-            self.state.categorias[categ].produtos.map((prod, k2)=>{
+            self.props._produtos.categorias[categ].produtos.map((prod, k2)=>{
                 li.push(<li key={'c'+k+'p'+k2}><a className="waves-effect" href="#!">{prod.Name}</a></li>)
             })
         })

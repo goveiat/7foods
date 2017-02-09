@@ -136,7 +136,7 @@ export default class ModalProduto extends React.Component {
             qtd: this.state.qtd
         }
 
-        this.props.pedido.add(dados);
+        this.props.handlePedido.add(dados);
 
         $(`#modalTamanho`).modal('close');
     }

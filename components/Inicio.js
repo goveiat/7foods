@@ -57,7 +57,6 @@ export default class Inicio extends React.Component {
     }
 
     componentDidMount(){
-        this.props.setSideBarItens([])
 
         setTimeout(()=>{
             this.setState({animeBemvindo: 'animated fadeInLeft'})

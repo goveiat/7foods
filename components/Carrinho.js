@@ -60,18 +60,18 @@ export default class Carrinho extends React.Component {
     }
 
     showData(){
-        if(this.props.pedido.count() > 0){
+        if(this.props.handlePedido.count() > 0){
           return (
                 <div style={{paddingTop: '50px'}} className="flow-text">
                     <ul className="collapsible" data-collapsible="expandable">
-                        {this.props.pedido.get().map(this.showPedido.bind(this))}
+                        {this.props.handlePedido.get().map(this.showPedido.bind(this))}
                       </ul>
 
                   <div className="card z-depth-2">
                     <div className="card-content">
                         <div className="row">
                             <div className="col s4">Total em Produtos</div>
-                            <div className="col s8 secondary-content" style={{textAlign:  'right'}}>R$ {this.props.pedido.total()}</div>
+                            <div className="col s8 secondary-content" style={{textAlign:  'right'}}>R$ {this.props.handlePedido.total()}</div>
                         </div>
                         <div className="row">
                             <div className="col s4">Forma de Pagamento</div>
@@ -323,13 +323,13 @@ export default class Carrinho extends React.Component {
         let val = 0;
         if(this.state.regiao){
             if(this.state.regiao in enderecos){
-                val = Number(this.props.pedido.total()) + Number(enderecos[this.state.regiao]);
+                val = Number(this.props.handlePedido.total()) + Number(enderecos[this.state.regiao]);
                 return 'R$ ' + val;
             }else{
                 return 'Não Entregamos'
             }
         }else{
-            val = 'R$ ' + this.props.pedido.total();
+            val = 'R$ ' + this.props.handlePedido.total();
             return val;
         }
 

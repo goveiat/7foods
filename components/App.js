@@ -18,11 +18,15 @@ export default class App extends React.Component {
         this.state = {
             _empresa: false,
             _cliente: false,
+            _produtos: false,
             hasError: false,
             sidebarItems: false,
             pedido: [],
             total: 0,
+
         }
+
+        this.handlePedido = this.nsPedido();
     }
 
     static defaultProps = {
@@ -30,9 +34,79 @@ export default class App extends React.Component {
     }
 
     componentDidMount(){
-        this.handlePedido();
         this.getLocalData();
 
+        this.xhrEmpresa();
+    }
+
+    componentDidUpdate(){
+
+    }
+
+    render(){
+
+        let view = this.getView();
+
+        if(this.state._empresa){
+            return (
+                <div>
+                    <Cabecalho
+                        titulo={this.state._empresa.dados.Name}
+                        showTitulo={view.props.showTitulo}
+                        logo={this.state._empresa.dados.Logo}
+                        _cliente={this.state._cliente}
+                        setCliente={this.setCliente.bind(this)}
+                        sidebarItems={this.state.sidebarItems}
+                        navStyle={view.props.navStyle} />
+                    <Secao img={this.state._empresa.dados.Background} titulo={view.props.nmSecao} />
+                    {view}
+                    <Rodape />
+                </div>
+            )
+        }else{
+            return (
+                <Preloader hasError={this.state.hasError} />
+            )
+        }
+
+    }
+
+
+    getView(){
+        let props = {};
+
+        switch(this.props.children.type.name){
+            case 'Inicio':
+            case 'Empresa':
+            case 'Login':
+            case 'NotFound':
+                props = {
+                    _empresa: this.state._empresa,
+                }; break;
+            case 'Cardapio':
+                props = {
+                    _empresa: this.state._empresa,
+                    _produtos: this.state._produtos,
+                    setSideBarItens: this.setSideBarItens.bind(this),
+                    handlePedido: this.handlePedido,
+                    setCliente: this.setCliente.bind(this),
+                    setProdutos: this.setProdutos.bind(this),
+                }; break;
+            case 'Carrinho':
+                props = {
+                    _empresa: this.state._empresa,
+                    handlePedido: this.handlePedido,
+                }; break;
+            default:
+                console.log('Tentativa de acessar: ' + this.props.children.type.name);
+                return (<Preloader hasError={this.state.hasError} />)
+        }
+
+        return React.cloneElement(this.props.children, props);
+    }
+
+
+    xhrEmpresa(){
         $.ajax({
             type: 'GET',
             dataType: 'json',
@@ -51,43 +125,6 @@ export default class App extends React.Component {
                 }
             }
         })
-    }
-
-    componentDidUpdate(){
-
-    }
-
-    render(){
-        var children = React.cloneElement(this.props.children, {
-            _empresa: this.state._empresa,
-            _cliente: this.state._cliente,
-            pedido: this.pedido,
-            setSideBarItens: this.setSideBarItens.bind(this),
-            setCliente: this.setCliente.bind(this),
-        });
-
-        if(this.state._empresa){
-            return (
-                <div>
-                    <Cabecalho
-                        titulo={this.state._empresa.dados.Name}
-                        showTitulo={children.props.showTitulo}
-                        logo={this.state._empresa.dados.Logo}
-                        _cliente={this.state._cliente}
-                        setCliente={this.setCliente.bind(this)}
-                        sidebarItems={this.state.sidebarItems}
-                        navStyle={children.props.navStyle} />
-                    <Secao img={this.state._empresa.dados.Background} titulo={children.props.nmSecao} />
-                    {children}
-                    <Rodape />
-                </div>
-            )
-        }else{
-            return (
-                <Preloader hasError={this.state.hasError} />
-            )
-        }
-
     }
 
 
@@ -128,11 +165,15 @@ export default class App extends React.Component {
         }
     }
 
+    setProdutos(prod){
+        this.setState({_produtos: prod});
+    }
 
-    handlePedido(){
-        this.pedido = {
+
+    nsPedido(){
+        return {
             add: (item) => {
-                item.total = this.pedido.totalItem(item);
+                item.total = this.handlePedido.totalItem(item);
                 let pedido = [item, ...this.state.pedido];
                 let total = Number(this.state.total) + Number(item.total);
                 this.setState({pedido: pedido, total: total});
@@ -172,6 +213,7 @@ export default class App extends React.Component {
             }
         }
     }
+
 
     handleCliente(){
 
