@@ -12,7 +12,7 @@ export default class Carrinho extends React.Component {
         this.state = {
             pagamento: this.props._empresa.tipoPagamento[0],
             entrega: this.props.tipoEntrega[0],
-            instantePag: this.props.instantesPag[0],
+            instantePag: false,
             dinheiro: 0,
             regiao: this.props._cliente ? this.props._cliente.enderecos[0].key : false,
             endereco: this.props._cliente ? this.props._cliente.enderecos[0] : false
@@ -108,7 +108,37 @@ export default class Carrinho extends React.Component {
     }
 
 
-    showEnderecos(){
+    campoCartao(){
+        if(this.state.instantePag.id == 'online'){
+            return (
+                <div className="row">
+                    <div className="col s4">Dados do Cartão</div>
+                    <div className="col s8">
+                        <div className="row">
+                            <div className="col s8">
+                                <input placeholder="Nº do Cartão" type="text"/>
+                            </div>
+                            <div className="col s4">
+                                <input placeholder="CVC **" type="text"/>
+                            </div>
+                            <div className="col s6">
+                                <input placeholder="Senha" type="password"/>
+                            </div>
+                            <div className="col s12" style={{fontSize: '1rem'}}>
+                                <span style={{fontWeight: 'bold'}}>**</span> O Código de Verificação (CVC) é composto pelos 3 últimos dígitos que aparecem atrás do cartão.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            )
+        }else{
+            return false;
+        }
+    }
+
+
+    campoEnderecos(){
         if(this.state.entrega.id == 'delivery'){
             return (
                 <div className="row">
@@ -134,7 +164,12 @@ export default class Carrinho extends React.Component {
             return (
                 <div  className="card z-depth-2 flow-text">
                     <div className="card-content">
-                        {this.showEnderecos()}
+                        <div className="row">
+                            <div className="col s4">Valor a Pagar</div>
+                            <div className="col s8 secondary-content" style={{textAlign:  'right'}}>{this.calcTotal()}</div>
+                        </div>
+                        {this.campoEnderecos()}
+                        {this.campoCartao()}
                     </div>
                 </div>
             )
@@ -154,7 +189,7 @@ export default class Carrinho extends React.Component {
         if(item.IDPaymenttype == 1){
             this.setState({pagamento: item});
         }else{
-            this.setState({dinheiro: 0, pagamento: item});
+            this.setState({dinheiro: 0, pagamento: item, instantePag: this.props.instantesPag[0]});
         }
     }
 
@@ -207,6 +242,7 @@ export default class Carrinho extends React.Component {
         }
     }
 
+
     campoTroco(){
         var self = this;
         if(this.state.pagamento.IDPaymenttype == 1){
@@ -243,13 +279,13 @@ export default class Carrinho extends React.Component {
     }
 
 
-
-
-
     showPedido(item, k){
         return (
                 <li key={k}>
-                  <div className="collapsible-header active"><h4>{item.Name}</h4></div>
+                  <div className="collapsible-header active">
+                    <h4>{item.Name} <span className="secondary-content">R$ {item.total.toFixed(2)}</span></h4>
+
+                    </div>
                   <div className="collapsible-body">
                         <div className="row">
                             <div className="col s3">
@@ -263,7 +299,7 @@ export default class Carrinho extends React.Component {
                                 </ul>
                                 <ul className="collection">
                                     <li className="collection-header"><h4>Opcionais</h4></li>
-                                    {this.showOpcionais(item)}
+                                    {this.campoOpcionais(item)}
                                 </ul>
                             </div>
                         </div>
@@ -273,12 +309,30 @@ export default class Carrinho extends React.Component {
     }
 
 
-    showOpcionais(prod){
+    campoOpcionais(prod){
         if(prod.opcoes == null || prod.opcoes.length == 0){
             return (<li className="collection-item">Não Possui</li> )
         }else{
             return prod.opcoes.map((item, k)=><li key={k} className="collection-item">{item.Title}<span className="secondary-content">{item.Value == '0.00' ? 'Grátis' : 'R$ '+item.Value}</span></li> )
         }
+    }
+
+
+    calcTotal(){
+        let enderecos = this.props._empresa.regioes.valor;
+        let val = 0;
+        if(this.state.regiao){
+            if(this.state.regiao in enderecos){
+                val = Number(this.props.pedido.total()) + Number(enderecos[this.state.regiao]);
+                return 'R$ ' + val;
+            }else{
+                return 'Não Entregamos'
+            }
+        }else{
+            val = 'R$ ' + this.props.pedido.total();
+            return val;
+        }
+
     }
 
 }
