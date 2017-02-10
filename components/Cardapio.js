@@ -131,7 +131,7 @@ export default class Cardapio extends React.Component {
     showCateg(item, k){
         return (
             <div key={k} className="section scrollspy" id={this.seo(item)}>
-                <h2  style={{fontWeight: '200'}} >{item}</h2>
+                <h2 className="r-h2" style={{fontWeight: '200'}} >{item}</h2>
                 {this.state.categorias[item].produtos.map(this.showProduto.bind(this))}
             </div>
         )
@@ -144,7 +144,7 @@ export default class Cardapio extends React.Component {
 
         return (
             <div key={k}>
-                <h3>{item.Name}</h3>
+                <h3 className="r-h3">{item.Name}</h3>
                 <div className="row">
                 {this.state.variedades[item.IDProduct].map(this.showVariedade.bind(this))}
                 </div>

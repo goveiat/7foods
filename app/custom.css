@@ -8,6 +8,8 @@
 
 /*CARDAPIO*/
 .r-cardapio .r-blcProduto{padding:0}
+.r-cardapio .r-h2{font-size: 2.5rem}
+.r-cardapio .r-h3{font-size: 2rem}
 
 /*PRODUTO*/
 .r-produto{height: 200px; margin:0}
@@ -32,3 +34,6 @@
 /*CABECALHO*/
 .r-cabecalho .r-nav{margin: 0;}
 .r-cabecalho .r-nav .r-menuLogin{padding-right: 5px;}
+
+/*LOGIN*/
+.r-login .r-container{width: initial;}

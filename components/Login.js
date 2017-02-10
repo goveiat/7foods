@@ -30,7 +30,8 @@ export default class Login extends React.Component {
 
     render() {
         return (
-            <div className="container">
+        <main className="r-login">
+            <div className="r-container container">
                 <div className="card z-depth-2" style={{margin: '50px 0'}}>
                     <div className="card-content flow-text">
                         <div className="row">
@@ -75,7 +76,9 @@ export default class Login extends React.Component {
                     </div>
                     {this.showLoading()}
                 </div>
-            </div>)
+            </div>
+        </main>
+        )
     }
 
 
