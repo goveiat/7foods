@@ -37,10 +37,10 @@ export default class Cabecalho extends React.Component {
 
     render() {
         return (
-          <div>
+          <div className="r-cabecalho">
           <div className="navbar-fixed js-nav">
             <nav style={this.props.navStyle}>
-              <div className="nav-wrapper">
+              <div className="r-nav nav-wrapper">
                 {this.getTitulo()}
                 <ul className="right">
                   {this.getMenuLogin()}
@@ -97,7 +97,7 @@ export default class Cabecalho extends React.Component {
 
     getMenuLogin(){
       if(this.props._cliente){
-          return(<li><a data-activates="slide-out" className="menuLateral"><i className="large material-icons">person</i></a></li>);
+          return(<li><a data-activates="slide-out" className="menuLateral r-menuLogin"><i className="large material-icons">account_circle</i></a></li>);
       }else{
           return false;
       }

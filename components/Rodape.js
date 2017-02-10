@@ -29,8 +29,8 @@ export default class Rodape extends React.Component {
           <footer className="page-footer" style={{marginTop: 0}}>
               <div className="footer-copyright">
                 <div className="container">
-                © 2014 Copyright Text
-                <a className="grey-text text-lighten-4 right" href="#!">More Links</a>
+                © 2017 A2Portais
+                <a className="grey-text text-lighten-4 right" href="/"><i className="material-icons">favorite</i></a>
                 </div>
               </div>
             </footer>
