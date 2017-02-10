@@ -9,6 +9,9 @@ import NotFound from '../components/NotFound';
 import Empresa from '../components/Empresa';
 import Cardapio from '../components/Cardapio';
 import AcessoNegado from '../components/AcessoNegado';
+import './animate.css';
+import './icon.css';
+import './custom.css';
 
 
 ReactDOM.render(
