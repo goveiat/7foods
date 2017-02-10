@@ -17,7 +17,10 @@ export default class Carrinho extends React.Component {
             instantePag: false,
             dinheiro: 0,
             regiao: this.props._cliente ? this.props._cliente.enderecos[0].key : false,
-            endereco: this.props._cliente ? this.props._cliente.enderecos[0] : false
+            endereco: this.props._cliente ? this.props._cliente.enderecos[0] : false,
+            numeroCartao: '',
+            cvcCartao: '',
+            senhaCartao: '',
         }
     }
 
@@ -143,13 +146,13 @@ export default class Carrinho extends React.Component {
                     <div className="col s8">
                         <div className="row">
                             <div className="col s8">
-                                <input placeholder="Nº do Cartão" type="text"/>
+                                <input value={this.state.numeroCartao} onChange={(e) => {this.setState({numeroCartao: e.target.value})}} placeholder="Nº do Cartão" type="text"/>
                             </div>
                             <div className="col s4">
-                                <input placeholder="CVC **" type="text"/>
+                                <input value={this.state.cvcCartao} onChange={(e) => {this.setState({cvcCartao: e.target.value})}} placeholder="CVC **" type="text"/>
                             </div>
                             <div className="col s6">
-                                <input placeholder="Senha" type="password"/>
+                                <input value={this.state.senhaCartao} onChange={(e) => {this.setState({senhaCartao: e.target.value})}} placeholder="Senha" type="password"/>
                             </div>
                             <div className="col s12" style={{fontSize: '1rem'}}>
                                 <span style={{fontWeight: 'bold'}}>**</span> O Código de Verificação (CVC) é composto pelos 3 últimos dígitos que aparecem atrás do cartão.
@@ -221,17 +224,34 @@ export default class Carrinho extends React.Component {
 
 
     submit(){
-        console.log(this.state);
-        console.log(this.props.handlePedido.get());
         let dados = {
             pagamento: this.state.pagamento.IDPaymenttype,
             dinheiro: this.state.dinheiro,
             endereco: this.state.endereco.id,
             entrega: this.state.entrega.id,
             instantePag: this.state.instantePag.id,
-            taxa: this.props._empresa.regioes.valor[this.state.endereco.id]
+            taxa: this.props._empresa.regioes.valor[this.state.endereco.id],
+            numeroCartao: this.state.numeroCartao,
+            cvcCartao: this.state.cvcCartao,
+            senhaCartao: this.state.senhaCartao,
+            pedido: this.props.handlePedido.get()
         }
-        console.log(dados)
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: `api/comprar`,
+            data: dados,
+            headers: {"Authorization": 'Bearer ' +localStorage.getItem('jwt')},
+            success: (retorno) => {
+                console.log(retorno)
+            },
+            error: (e) => {
+                console.error(e.responseText)
+                this.setState({hasError: true});
+            }
+        });
+
     }
 
 
