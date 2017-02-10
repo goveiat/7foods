@@ -182,9 +182,11 @@ export default class App extends React.Component {
 
             remove: (i) => {
                 let pedido = this.state.pedido;
+                let total = Number(this.state.total) - Number(pedido[i].total);
                 pedido.splice(i, 1);
-                this.setState({pedido: pedido})
+                this.setState({pedido: pedido, total: total})
                 localStorage.setItem('pedido', JSON.stringify(pedido));
+                localStorage.setItem('total', total);
             },
 
             get: () => {

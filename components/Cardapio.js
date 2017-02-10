@@ -38,22 +38,9 @@ export default class Cardapio extends React.Component {
             </li>);
 
 
-        let produtos = sessionStorage.getItem('produtos');
-        if(produtos != null){
-            produtos = JSON.parse(produtos);
-            this.setState({
-              categorias: produtos.categorias,
-              variedades: produtos.variedades,
-              opcoes: produtos.opcoes,
-              hasData: true
-            });
-
-            this.props.setSideBarItens(this.setMenu());
-        }else{
+        if(!this.getLocalData()){
             this.xhrProdutos();
         }
-
-
 
     }
 
@@ -70,6 +57,23 @@ export default class Cardapio extends React.Component {
         )
     }
 
+    getLocalData(){
+        let produtos = sessionStorage.getItem('produtos');
+        if(produtos != null){
+            produtos = JSON.parse(produtos);
+            this.setState({
+              categorias: produtos.categorias,
+              variedades: produtos.variedades,
+              opcoes: produtos.opcoes,
+              hasData: true
+            }, () => {this.props.setSideBarItens(this.setMenu())});
+
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     xhrProdutos(){
 
         $.ajax({
@@ -84,9 +88,8 @@ export default class Cardapio extends React.Component {
                       variedades: retorno.produtos.variedades,
                       opcoes: retorno.produtos.opcoes,
                       hasData: true
-                    });
+                    }, () => {this.props.setSideBarItens(this.setMenu())});
                     this.props.setCliente(retorno.cliente);
-                    this.props.setSideBarItens(this.setMenu());
                     sessionStorage.setItem('produtos', JSON.stringify(retorno.produtos));
                 }
             },

@@ -1,7 +1,9 @@
 import React from 'react';
 import {Link} from 'react-router';
 import DropDown from './DropDown';
+import AutoComplete from './AutoComplete';
 import SimpleCurrencyInput from 'react-simple-currency';
+
 
 export default class Carrinho extends React.Component {
 
@@ -34,16 +36,11 @@ export default class Carrinho extends React.Component {
 
     componentDidMount(){
         var self = this;
+
+        this.getLocalData();
+
         $('.js-carrinho .collapsible').collapsible();
         $('.js-carrinho select').material_select();
-
-        $('#regioes').autocomplete({
-            data: self.props._empresa.regioes.autocomplete,
-            limit: 20,
-        });
-        $('.autocomplete-content').on('click', 'li', function(){
-            self.setState({regiao: this.innerText});
-        })
 
     }
 
@@ -53,10 +50,37 @@ export default class Carrinho extends React.Component {
             <main className="js-carrinho">
                 <div className="container">
                     {this.showData()}
-                    {this.showCheckout()}
                 </div>
             </main>
         )
+    }
+
+    getLocalData(){
+        let pagamento = localStorage.getItem('pagamento');
+        let entrega = localStorage.getItem('entrega');
+        let instantePag = localStorage.getItem('instantePag');
+        let dinheiro = localStorage.getItem('dinheiro');
+        let regiao = localStorage.getItem('regiao');
+        let endereco = localStorage.getItem('endereco');
+
+        if(pagamento != null){
+            this.setState({pagamento: JSON.parse(pagamento)});
+        }
+        if(entrega != null){
+            this.setState({entrega: JSON.parse(entrega)});
+        }
+        if(instantePag != null){
+            this.setState({instantePag: JSON.parse(instantePag)});
+        }
+        if(dinheiro != null){
+            this.setState({dinheiro: JSON.parse(dinheiro)});
+        }
+        if(regiao != null){
+            this.setState({regiao: JSON.parse(regiao)});
+        }
+        if(endereco != null){
+            this.setState({endereco: JSON.parse(endereco)});
+        }
     }
 
     showData(){
@@ -77,6 +101,7 @@ export default class Carrinho extends React.Component {
                             <div className="col s4">Forma de Pagamento</div>
                             <div className="col s8">
                                 <DropDown
+                                    selecionado={this.state.pagamento}
                                     id="pagamento"
                                     label="Title"
                                     items={this.props._empresa.tipoPagamento}
@@ -89,6 +114,7 @@ export default class Carrinho extends React.Component {
                             <div className="col s4">Forma de Entrega</div>
                             <div className="col s8">
                                 <DropDown
+                                    selecionado={this.state.entrega}
                                     id="entrega"
                                     label="label"
                                     items={this.props.tipoEntrega}
@@ -100,6 +126,7 @@ export default class Carrinho extends React.Component {
                         {this.campoTaxa()}
                     </div>
                   </div>
+                  {this.showCheckout()}
                 </div>
             )
         }else{
@@ -145,10 +172,15 @@ export default class Carrinho extends React.Component {
                     <div className="col s4">Endereço de Entrega</div>
                     <div className="col s8">
                         <DropDown
+                            selecionado={this.state.endereco}
                             id="enderecos"
                             label="label"
                             items={this.props._cliente.enderecos}
-                            onSelect={(item) => {this.setState({endereco: item, regiao: item.key})}}
+                            onSelect={(item) => {
+                                this.setState({endereco: item, regiao: item.key});
+                                localStorage.setItem('endereco', JSON.stringify(item));
+                                localStorage.setItem('regiao', JSON.stringify(item.key));
+                            }}
                         />
                     </div>
                 </div>
@@ -170,6 +202,9 @@ export default class Carrinho extends React.Component {
                         </div>
                         {this.campoEnderecos()}
                         {this.campoCartao()}
+                        <div className="row" style={{textAlign: 'center'}}>
+                            <button onClick={() => {this.submit()}} className="waves-effect waves-light btn green darken-2 btn-large">Finalizar</button>
+                        </div>
                     </div>
                 </div>
             )
@@ -185,11 +220,31 @@ export default class Carrinho extends React.Component {
     }
 
 
+    submit(){
+        console.log(this.state);
+        console.log(this.props.handlePedido.get());
+        let dados = {
+            pagamento: this.state.pagamento.IDPaymenttype,
+            dinheiro: this.state.dinheiro,
+            endereco: this.state.endereco.id,
+            entrega: this.state.entrega.id,
+            instantePag: this.state.instantePag.id,
+            taxa: this.props._empresa.regioes.valor[this.state.endereco.id]
+        }
+        console.log(dados)
+    }
+
+
     setPagamento(item){
         if(item.IDPaymenttype == 1){
-            this.setState({pagamento: item});
+            this.setState({pagamento: item, instantePag: this.props.instantesPag[1]});
+            localStorage.setItem('pagamento', JSON.stringify(item));
+            localStorage.setItem('instantePag', JSON.stringify(this.props.instantesPag[1]));
         }else{
             this.setState({dinheiro: 0, pagamento: item, instantePag: this.props.instantesPag[0]});
+            localStorage.setItem('dinheiro', JSON.stringify(0));
+            localStorage.setItem('pagamento', JSON.stringify(item));
+            localStorage.setItem('instantePag', JSON.stringify(this.props.instantesPag[0]));
         }
     }
 
@@ -197,8 +252,11 @@ export default class Carrinho extends React.Component {
     setEntrega(item){
         if(item.id == 'delivery'){
             this.setState({entrega: item});
+            localStorage.setItem('entrega', JSON.stringify(item));
         }else{
             this.setState({regiao: false, entrega: item});
+            localStorage.setItem('entrega', JSON.stringify(item));
+            localStorage.setItem('regiao', JSON.stringify(false));
         }
     }
 
@@ -233,7 +291,16 @@ export default class Carrinho extends React.Component {
                 <div className="row">
                     <div className="col s4">Regiões de Entrega</div>
                     <div className="col s8">
-                          <input placeholder="Informe o Bairro" type="text" id="regioes" />
+                    <AutoComplete
+                        id="regioes"
+                        placeholder="Informe o Bairro"
+                        items={this.props._empresa.regioes.autocomplete}
+                        onSelect={(sel) => {
+                            this.setState({regiao: sel});
+                            localStorage.setItem('regiao', JSON.stringify(sel));
+                        }}
+                    />
+
                     </div>
                 </div>
             )
@@ -256,7 +323,10 @@ export default class Carrinho extends React.Component {
                           separator=','
                           delimiter='.'
                           unit='R$'
-                          onInputChange={(raw, display) => {this.setState({dinheiro: raw})}}
+                          onInputChange={(raw, display) => {
+                            this.setState({dinheiro: raw});
+                            localStorage.setItem('dinheiro', JSON.stringify(raw));
+                        }}
                         />
                     </div>
                 </div>
@@ -267,10 +337,14 @@ export default class Carrinho extends React.Component {
                     <div className="col s4">Instante do Pagamento</div>
                     <div className="col s8">
                     <DropDown
+                        selecionado={this.state.instantePag}
                         id="instPag"
                         label="label"
                         items={this.props.instantesPag}
-                        onSelect={(item) => {this.setState({instantePag: item})}}
+                        onSelect={(item) => {
+                            this.setState({instantePag: item});
+                            localStorage.setItem('instantePag', JSON.stringify(item));
+                        }}
                     />
                     </div>
                 </div>
@@ -288,8 +362,9 @@ export default class Carrinho extends React.Component {
                     </div>
                   <div className="collapsible-body">
                         <div className="row">
-                            <div className="col s3">
+                            <div className="col s3" style={{textAlign: 'center'}}>
                                 <img src={`http://ligchina.a2${item.Image}`} style={{width: '100%'}} alt=""/>
+                                <button onClick={() => {this.props.handlePedido.remove(k)}} className="waves-effect waves-light btn" style={{fontSize: '1rem'}}>Remover</button>
                             </div>
                             <div className="col s9">
                                 <ul className="collection">
@@ -324,13 +399,13 @@ export default class Carrinho extends React.Component {
         if(this.state.regiao){
             if(this.state.regiao in enderecos){
                 val = Number(this.props.handlePedido.total()) + Number(enderecos[this.state.regiao]);
-                return 'R$ ' + val;
+                return 'R$ ' + val.toFixed(2);
             }else{
                 return 'Não Entregamos'
             }
         }else{
-            val = 'R$ ' + this.props.handlePedido.total();
-            return val;
+            val = Number(this.props.handlePedido.total()).toFixed(2);
+            return 'R$ ' + val;
         }
 
     }

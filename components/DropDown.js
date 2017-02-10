@@ -9,9 +9,10 @@ export default class DropDown extends React.Component {
         super(props);
 
         this.state = {
-            selecionado: this.props.items[0],
+
         }
     }
+
 
     componentDidMount(){
         $('#'+this.props.id).dropdown();
@@ -20,12 +21,11 @@ export default class DropDown extends React.Component {
     render() {
         return (
             <div>
-                  <input id={this.props.id}  type="text" data-activates={this.props.id + '-ul'} value={this.state.selecionado[this.props.label]} readOnly={true} />
+                  <input id={this.props.id}  type="text" data-activates={this.props.id + '-ul'} value={this.props.selecionado[this.props.label]} readOnly={true} />
                   <ul id={this.props.id + '-ul'} className='dropdown-content'>
                     {this.props.items.map((item, k) =>
                         <li key={k} ><a onClick={() => {
                             this.props.onSelect(item);
-                            this.setState({selecionado: item});
                         }}>{item[this.props.label]}</a></li>
                       )}
                   </ul>

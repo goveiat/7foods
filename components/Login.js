@@ -131,7 +131,7 @@ export default class Login extends React.Component {
             success: (retorno) => {
                 this.setState({enviando: false, erro: false});
                 this.props.setCliente(retorno);
-                hashHistory.replace({pathname: '/cardapio'});
+                hashHistory.goBack();
             },
             error: (e) => {
                 this.setState({enviando: false});
