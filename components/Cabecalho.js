@@ -18,11 +18,13 @@ export default class Cabecalho extends React.Component {
       titulo: '',
       navStyle: {},
       showTitulo: false,
-      backButton: true
+      backButton: true,
+      width: 250
     }
 
     componentDidMount(){
           $('.js-nav .menuLateral').sideNav({
+              menuWidth: this.props.width,
               edge: 'right',
               draggable: true
             }
