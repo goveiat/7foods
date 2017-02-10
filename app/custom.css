@@ -15,3 +15,7 @@
 .r-produto .r-content{padding: 10px}
 .r-produto .r-content .r-titulo{line-height: 30px}
 .r-produto .r-reveal{padding: 10px}
+
+/*MODAL TAMANHO*/
+.r-modalTamanho{width: 95%}
+.r-modalTamanho .r-content{padding: 5px}

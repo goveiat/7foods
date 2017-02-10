@@ -43,14 +43,14 @@ export default class ModalProduto extends React.Component {
 
     render() {
         return (
-          <div id="modalTamanho" style={{overflowX: 'hidden'}}  className="js-modalTamanho modal modal-fixed-footer">
+          <div id="modalTamanho" style={{overflowX: 'hidden'}}  className="r-modalTamanho modal modal-fixed-footer">
                 <ul className="tabs" style={{overflowX: 'hidden'}}>
                     <li className="tab col s4 active"><a href={"#tab1"}>Tamanhos</a></li>
                     <li className="tab col s4"><a href={"#tab2"}>Opções</a></li>
                     <li className="tab col s4"><a href={"#tab3"}>Quantidade</a></li>
                   </ul>
 
-            <div className="modal-content">
+            <div className="r-content modal-content">
                 <div id="tab1" data-index="1">
                     <Tamanhos lista={this.props.tamanhos} id={this.props.group_id} setTamanho={this.setTamanho.bind(this)} />
                 </div>
