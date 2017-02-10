@@ -2,8 +2,7 @@ import React from 'react';
 import {Link} from 'react-router';
 import DropDown from './DropDown';
 import AutoComplete from './AutoComplete';
-import SimpleCurrencyInput from 'react-simple-currency';
-
+import InputMoney from './InputMoney';
 
 export default class Carrinho extends React.Component {
 
@@ -42,16 +41,15 @@ export default class Carrinho extends React.Component {
 
         this.getLocalData();
 
-        $('.js-carrinho .collapsible').collapsible();
-        $('.js-carrinho select').material_select();
+        $('#js-carrinho .collapsible').collapsible();
 
     }
 
 
     render() {
         return (
-            <main className="js-carrinho">
-                <div className="container">
+            <main id="js-carrinho" className="r-carrinho">
+                <div className="r-container container">
                     {this.showData()}
                 </div>
             </main>
@@ -94,16 +92,17 @@ export default class Carrinho extends React.Component {
                         {this.props.handlePedido.get().map(this.showPedido.bind(this))}
                       </ul>
 
-                  <div className="card z-depth-2">
+                  <div className="r-checkout card z-depth-2">
                     <div className="card-content">
                         <div className="row">
-                            <div className="col s4">Total em Produtos</div>
-                            <div className="col s8 secondary-content" style={{textAlign:  'right'}}>R$ {this.props.handlePedido.total()}</div>
+                            <h4 className="r-titulo col s8">Total em Produtos</h4>
+                            <h4 className="r-totalProd col s4 secondary-content" style={{textAlign:  'right'}}>R$ {this.props.handlePedido.total()}</h4>
                         </div>
                         <div className="row">
-                            <div className="col s4">Forma de Pagamento</div>
-                            <div className="col s8">
+                            <div className="hide-on-small-only col s4">Forma de Pagamento</div>
+                            <div className="col s12">
                                 <DropDown
+                                    labelInput="Forma de Pagamento"
                                     selecionado={this.state.pagamento}
                                     id="pagamento"
                                     label="Title"
@@ -114,9 +113,10 @@ export default class Carrinho extends React.Component {
                         </div>
                         {this.campoTroco()}
                         <div className="row">
-                            <div className="col s4">Forma de Entrega</div>
-                            <div className="col s8">
+                            <div className="hide-on-small-only col s4">Forma de Entrega</div>
+                            <div className="col s12">
                                 <DropDown
+                                    labelInput="Forma de Entrega"
                                     selecionado={this.state.entrega}
                                     id="entrega"
                                     label="label"
@@ -142,8 +142,8 @@ export default class Carrinho extends React.Component {
         if(this.state.instantePag.id == 'online'){
             return (
                 <div className="row">
-                    <div className="col s4">Dados do Cartão</div>
-                    <div className="col s8">
+                    <div className="hide-on-small-only col s4">Dados do Cartão</div>
+                    <div className="col s12">
                         <div className="row">
                             <div className="col s8">
                                 <input value={this.state.numeroCartao} onChange={(e) => {this.setState({numeroCartao: e.target.value})}} placeholder="Nº do Cartão" type="text"/>
@@ -154,7 +154,7 @@ export default class Carrinho extends React.Component {
                             <div className="col s6">
                                 <input value={this.state.senhaCartao} onChange={(e) => {this.setState({senhaCartao: e.target.value})}} placeholder="Senha" type="password"/>
                             </div>
-                            <div className="col s12" style={{fontSize: '1rem'}}>
+                            <div className="col s12" style={{fontSize: '1rem', textAlign: 'justify'}}>
                                 <span style={{fontWeight: 'bold'}}>**</span> O Código de Verificação (CVC) é composto pelos 3 últimos dígitos que aparecem atrás do cartão.
                             </div>
                         </div>
@@ -172,9 +172,10 @@ export default class Carrinho extends React.Component {
         if(this.state.entrega.id == 'delivery'){
             return (
                 <div className="row">
-                    <div className="col s4">Endereço de Entrega</div>
-                    <div className="col s8">
+                    <div className="hide-on-small-only col s4">Endereço de Entrega</div>
+                    <div className="col s12">
                         <DropDown
+                            labelInput="Endereço de Entrega"
                             selecionado={this.state.endereco}
                             id="enderecos"
                             label="label"
@@ -197,11 +198,11 @@ export default class Carrinho extends React.Component {
     showCheckout(){
         if(this.props._cliente){
             return (
-                <div  className="card z-depth-2 flow-text">
+                <div  className="r-checkout card z-depth-2 flow-text">
                     <div className="card-content">
                         <div className="row">
-                            <div className="col s4">Valor a Pagar</div>
-                            <div className="col s8 secondary-content" style={{textAlign:  'right'}}>{this.calcTotal()}</div>
+                            <h4 className="r-titulo col s8">Valor a Pagar</h4>
+                            <h4 className="r-totalProd col s4 secondary-content" style={{textAlign:  'right'}}>{this.calcTotal()}</h4>
                         </div>
                         {this.campoEnderecos()}
                         {this.campoCartao()}
@@ -285,16 +286,16 @@ export default class Carrinho extends React.Component {
             if (this.state.regiao in this.props._empresa.regioes.valor){
                 return (
                     <div className="row">
-                        <div className="col s4">Taxa de Entrega</div>
-                        <div className="col s5" style={{fontSize: '1rem', marginTop: '10px'}}>{this.state.regiao}</div>
-                        <div className="col s3 secondary-content" style={{textAlign:  'right'}}>R$ {this.props._empresa.regioes.valor[this.state.regiao]}</div>
+                        <div className="hide-on-small-only  col s4">Taxa de Entrega</div>
+                        <div className="col s8" style={{fontSize: '1rem'}}>{this.state.regiao}</div>
+                        <div className="col s4 secondary-content" style={{textAlign:  'right'}}>R$ {this.props._empresa.regioes.valor[this.state.regiao]}</div>
                     </div>
                 )
             }else{
                 return (
                     <div className="row">
-                        <div className="col s4">Taxa de Entrega</div>
-                        <div className="col s8 secondary-content">Fora da região de Entrega</div>
+                        <div className="hide-on-small-only col s4">Taxa de Entrega</div>
+                        <div className="col s12 secondary-content">Fora da região de Entrega</div>
                     </div>
                 )
             }
@@ -309,8 +310,8 @@ export default class Carrinho extends React.Component {
         if(this.state.entrega.id == 'delivery'){
             return (
                 <div className="row">
-                    <div className="col s4">Regiões de Entrega</div>
-                    <div className="col s8">
+                    <div className="hide-on-small-only col s4">Regiões de Entrega</div>
+                    <div className="col s12">
                     <AutoComplete
                         id="regioes"
                         placeholder="Informe o Bairro"
@@ -335,28 +336,27 @@ export default class Carrinho extends React.Component {
         if(this.state.pagamento.IDPaymenttype == 1){
             return (
                 <div className="row">
-                    <div className="col s4">Troco para</div>
-                    <div className="col s8">
-                        <SimpleCurrencyInput
-                          value={this.state.dinheiro}
-                          precision={2}
-                          separator=','
-                          delimiter='.'
-                          unit='R$'
-                          onInputChange={(raw, display) => {
-                            this.setState({dinheiro: raw});
-                            localStorage.setItem('dinheiro', JSON.stringify(raw));
-                        }}
-                        />
+                    <div className="hide-on-small-only col s4">Troco para</div>
+                    <div className="col s12">
+                        <InputMoney
+                            id="trocoPara"
+                            labelInput="Troco Para"
+                            value={this.state.dinheiro}
+                            onChange={(raw, display) => {
+                                this.setState({dinheiro: raw});
+                                localStorage.setItem('dinheiro', JSON.stringify(raw));
+                            }}
+                         />
                     </div>
                 </div>
             )
         }else{
             return (
                 <div className="row">
-                    <div className="col s4">Instante do Pagamento</div>
-                    <div className="col s8">
+                    <div className="hide-on-small-only col s4">Instante do Pagamento</div>
+                    <div className="col s12">
                     <DropDown
+                        labelInput="Instante do Pagamento"
                         selecionado={this.state.instantePag}
                         id="instPag"
                         label="label"
@@ -376,24 +376,29 @@ export default class Carrinho extends React.Component {
     showPedido(item, k){
         return (
                 <li key={k}>
-                  <div className="collapsible-header active">
-                    <h4>{item.Name} <span className="secondary-content">R$ {item.total.toFixed(2)}</span></h4>
-
+                  <div className="r-header collapsible-header active">
+                    <h4 className="r-titulo">{item.Name} <span className="secondary-content">R$ {item.total.toFixed(2)}</span></h4>
                     </div>
-                  <div className="collapsible-body">
+                  <div className="r-body collapsible-body">
                         <div className="row">
-                            <div className="col s3" style={{textAlign: 'center'}}>
-                                <img src={`http://ligchina.a2${item.Image}`} style={{width: '100%'}} alt=""/>
-                                <button onClick={() => {this.props.handlePedido.remove(k)}} className="waves-effect waves-light btn" style={{fontSize: '1rem'}}>Remover</button>
+                            <div className="col s12" style={{textAlign: 'center'}}>
+                                <div className="row  valign-wrapper">
+                                    <div className="r-blcImg col s6">
+                                         <img className="col s6" src={`http://ligchina.a2${item.Image}`} style={{width: '100%', paddingRight: 0, paddingLeft: 30}} alt=""/>
+                                    </div>
+                                    <div className="col s6 valign">
+                                        <button onClick={() => {this.props.handlePedido.remove(k)}} className="waves-effect waves-light btn" style={{fontSize: '1rem'}}>Remover</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="col s9">
+                            <div className="col s12">
                                 <ul className="collection">
                                     <li className="collection-item">Quantidade <span className="secondary-content">{item.qtd}</span></li>
                                     <li className="collection-item">Tamanho <span className="secondary-content">{item.tamanho.Name}</span></li>
                                     <li className="collection-item">Valor Unitário<span className="secondary-content">R$ {item.tamanho.valor}</span></li>
                                 </ul>
                                 <ul className="collection">
-                                    <li className="collection-header"><h4>Opcionais</h4></li>
+                                    <li className="collection-header"><h4 className="r-cTitulo">Opcionais</h4></li>
                                     {this.campoOpcionais(item)}
                                 </ul>
                             </div>

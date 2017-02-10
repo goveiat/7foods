@@ -1,8 +1,9 @@
 import React, {PropTypes} from 'react';
 import MediaQuery from 'react-responsive';
+import SimpleCurrencyInput from 'react-simple-currency';
 
 
-export default class AutoComplete extends React.Component {
+export default class InputMoney extends React.Component {
 
 
     constructor(props){
@@ -13,20 +14,18 @@ export default class AutoComplete extends React.Component {
         }
     }
 
+    static defaultProps = {
+        labelInput: 'label',
+    }
+
 
     componentDidMount(){
-      let self = this;
-        $('#' + this.props.id).autocomplete({
-            data: self.props.items,
-            limit: 5,
-        });
-        $('#' + this.props.id +' + '+ 'ul.autocomplete-content').on('click', 'li', function(){
-            self.props.onSelect(this.innerText);
-        })
+        Materialize.updateTextFields()
     }
 
     render() {
         return (
+            <div>
                 <MediaQuery minWidth={600}>
                   {(matches) => {
                       if(matches){
@@ -36,35 +35,41 @@ export default class AutoComplete extends React.Component {
                       }
                   }}
                 </MediaQuery>
+            </div>
         )
     }
 
-
     body(view){
       let inpF = '';
-      let place = {placeholder: this.props.placeholder};
       if(view == 480){
           inpF = 'input-field';
-          place = {}
       }
       return (
         <div className={inpF}>
-            <input {...place} type="text" id={this.props.id} />
+            <SimpleCurrencyInput
+                id={this.props.id}
+                value={this.props.value}
+                precision={2}
+                separator=','
+                delimiter='.'
+                unit='R$'
+                onInputChange={(raw, display) => {this.props.onChange(raw, display)}}
+            />
             {this.showLabel(inpF)}
         </div>
       )
     }
 
-
     showLabel(inpF){
       if(inpF != ''){
-        return (<label className="active"  htmlFor={this.props.id}>{this.props.placeholder}</label>)
+        return (<label className="active"  htmlFor={this.props.id}>{this.props.labelInput}</label>)
       }else{
         return false;
       }
     }
 
-
-
 }
 
+InputMoney.propTypes = {
+
+};

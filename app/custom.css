@@ -16,6 +16,15 @@
 .r-produto .r-content .r-titulo{line-height: 30px}
 .r-produto .r-reveal{padding: 10px}
 
-/*MODAL Produto*/
+/*MODAL PRODUTO*/
 .r-modalProduto{width: 95%}
 .r-modalProduto .r-content{padding: 5px}
+
+/*CARRINHO*/
+.r-carrinho .r-header{padding: 0 0.5rem}
+.r-carrinho .r-container{width: initial;}
+.r-carrinho .r-header .r-titulo{font-size: 1.4rem}
+.r-carrinho .r-body .r-blcImg{padding: 0}
+.r-carrinho .r-body .r-cTitulo{font-size: 1.4rem; margin-left: 20px;}
+.r-carrinho .r-checkout .r-titulo,
+.r-carrinho .r-checkout .r-totalProd{font-size: 1.4rem; margin: 0; margin-top: 3px}

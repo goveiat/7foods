@@ -32,7 +32,7 @@ export default class Produto extends React.Component {
 
     render() {
         return (
-          <div className="r-produto card">
+          <div className="r-produto card card-panel hoverable">
               <div className="r-img card-image waves-effect waves-block waves-light activator" style={{background: `url(http://ligchina.a2${this.props.item.Image})`, backgroundSize: 'cover', zIndex:0}}>
               </div>
               <div className="r-content card-content">
