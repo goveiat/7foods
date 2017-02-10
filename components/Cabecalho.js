@@ -17,7 +17,8 @@ export default class Cabecalho extends React.Component {
     static defaultProps = {
       titulo: '',
       navStyle: {},
-      showTitulo: false
+      showTitulo: false,
+      backButton: true
     }
 
     componentDidMount(){
@@ -44,7 +45,7 @@ export default class Cabecalho extends React.Component {
                   <li><a data-activates="slide-out" className="menuLateral"><i className="large material-icons">menu</i></a></li>
                 </ul>
                 <ul className="left">
-                  <li><a onClick={hashHistory.goBack} ><i className="material-icons">arrow_back</i></a></li>
+                  {this.showBackButton()}
                 </ul>
               </div>
             </nav>
@@ -64,6 +65,15 @@ export default class Cabecalho extends React.Component {
             </ul>
           </div>
         )
+    }
+
+
+    showBackButton(){
+      if(this.props.backButton){
+        return (<li><a onClick={hashHistory.goBack} ><i className="material-icons">arrow_back</i></a></li>)
+      }else{
+        return false;
+      }
     }
 
 

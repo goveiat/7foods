@@ -52,6 +52,7 @@ export default class App extends React.Component {
                     <Cabecalho
                         titulo={this.state._empresa.dados.Name}
                         showTitulo={view.props.showTitulo}
+                        backButton={view.props.backButton}
                         logo={this.state._empresa.dados.Logo}
                         _cliente={this.state._cliente}
                         setCliente={this.setCliente.bind(this)}
