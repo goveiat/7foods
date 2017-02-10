@@ -38,7 +38,7 @@ export default class Produto extends React.Component {
               <div className="r-content card-content">
                   <span className="r-titulo card-title activator grey-text text-darken-4"><Clamp clamp={2}>{this.props.item.Name}</Clamp></span>
               </div>
-              <div className="r-reveal card-reveal">
+              <div className="r-reveal card-reveal" style={{zIndex: 0}}>
                   <span className="card-title grey-text text-darken-4"><i className="material-icons right">close</i><Clamp clamp={1}>{this.props.item.Name}</Clamp></span>
                   <Clamp style={{textAlign: 'justify'}} clamp={4}>{this.props.item.Description} A partir de <strong>R$ {this.props.item.minVal.replace('.',',')}.</strong></Clamp>
                   <p style={this.styles.btnVerMais} >

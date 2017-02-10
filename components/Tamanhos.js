@@ -29,6 +29,10 @@ export default class Tamanhos extends React.Component {
 
     }
 
+    componentWillReceiveProps(next){
+        this.setState({checked: next.lista[0]});
+    }
+
     render() {
         return (
             <div>
