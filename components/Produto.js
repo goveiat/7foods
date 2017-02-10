@@ -38,9 +38,9 @@ export default class Produto extends React.Component {
             <div className="card-content" style={{padding: 10}}>
               <span style={{lineHeight: '30px'}} className="card-title activator grey-text text-darken-4"><Clamp clamp={2}>{this.props.item.Name}</Clamp></span>
             </div>
-            <div className="card-reveal">
-              <span className="card-title grey-text text-darken-4"><i className="material-icons right">close</i>{this.props.item.Name}</span>
-              <p style={{textAlign: 'justify'}}>{this.props.item.Description} A partir de <strong>R$ {this.props.item.minVal.replace('.',',')}.</strong></p>
+            <div className="card-reveal" style={{padding: 10}}>
+              <span className="card-title grey-text text-darken-4"><i className="material-icons right">close</i><Clamp clamp={1}>{this.props.item.Name}</Clamp></span>
+              <p style={{textAlign: 'justify'}}> <Clamp clamp={3}>{this.props.item.Description}</Clamp> A partir de <strong>R$ {this.props.item.minVal.replace('.',',')}.</strong></p>
               <p style={this.styles.btnVerMais} >
                   <a className="waves-effect waves-light btn" onClick={()=>{this.props.showModal(this.props.item)}}>Ver mais</a>
               </p>
