@@ -62,7 +62,7 @@ export default class Empresa extends React.Component {
                         <li className="collection-header"><h4>Fale Conosco</h4></li>
                         <li className="collection-item">
                             E-mail
-                            <div className="secondary-content">{_empresa.dados.Email}</div>
+                            <div className="secondary-content" style={{display: 'inline-block', width: '60%'}}>{_empresa.dados.Email}</div>
                         </li>
                         {this.getEndereco()}
                     </ul>
@@ -82,7 +82,7 @@ export default class Empresa extends React.Component {
           Object.keys(enderecos).map((k, i) =>
                <li className="collection-item" key={i}>
                   {enderecos[k].Nickname}
-                  <div className="secondary-content">
+                  <div className="secondary-content" style={{display: 'inline-block', width: '60%'}}>
                     {enderecos[k].Address +', ' + enderecos[k].Number +', '+ enderecos[k].Address2 + ', '+ enderecos[k].City+ " - "+ enderecos[k].State}
                     <br /><br />
                     {enderecos[k].Telephone}
@@ -101,7 +101,7 @@ export default class Empresa extends React.Component {
                <li className="collection-item" key={i}>
                     <div>
                       {dias[k]}
-                      <div className="secondary-content">{self.getAgendaDia(horario, k, msg)}</div>
+                      <div style={{display: 'inline-block', width: '60%'}} className="secondary-content">{self.getAgendaDia(horario, k, msg)}</div>
                     </div>
                 </li>
             )
@@ -116,7 +116,7 @@ export default class Empresa extends React.Component {
             )
           )
       }else{
-        return (<span className="f7-err"  style={{marginRight: '10px'}}>{msg}</span>)
+        return (<span className="right"  style={{marginRight: '10px'}}>{msg}</span>)
       }
     }
 
