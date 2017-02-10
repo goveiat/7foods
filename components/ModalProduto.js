@@ -22,7 +22,7 @@ export default class ModalProduto extends React.Component {
 
     componentDidMount(){
         var self = this;
-        $('#modalTamanho').modal({
+        $('#modalProduto').modal({
             ready: function(){
                 $(this).find('.tabs').first().tabs({
                     onShow: function(el){
@@ -43,7 +43,7 @@ export default class ModalProduto extends React.Component {
 
     render() {
         return (
-          <div id="modalTamanho" style={{overflowX: 'hidden'}}  className="r-modalTamanho modal modal-fixed-footer">
+          <div id="modalProduto" style={{overflowX: 'hidden'}}  className="r-modalProduto modal modal-fixed-footer">
                 <ul className="tabs" style={{overflowX: 'hidden'}}>
                     <li className="tab col s4 active"><a href={"#tab1"}>Tamanhos</a></li>
                     <li className="tab col s4"><a href={"#tab2"}>Opções</a></li>
@@ -116,12 +116,12 @@ export default class ModalProduto extends React.Component {
 
     goProximo(){
         var i = Number(this.state.abaAtiva) + 1;
-        $("#modalTamanho ul.tabs").tabs('select_tab', "tab"+i);
+        $("#modalProduto ul.tabs").tabs('select_tab', "tab"+i);
     }
 
     goAnterior(){
         var i = this.state.abaAtiva - 1;
-        $("#modalTamanho ul.tabs").tabs('select_tab', "tab"+i);
+        $("#modalProduto ul.tabs").tabs('select_tab', "tab"+i);
     }
 
 
@@ -138,7 +138,7 @@ export default class ModalProduto extends React.Component {
 
         this.props.handlePedido.add(dados);
 
-        $(`#modalTamanho`).modal('close');
+        $(`#modalProduto`).modal('close');
     }
 
 }
