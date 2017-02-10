@@ -12,7 +12,7 @@
 .r-cardapio .r-h3{font-size: 2rem}
 
 /*PRODUTO*/
-.r-produto{height: 200px; margin:0}
+.r-produto{height: 200px; margin:0; padding: 0;}
 .r-produto .r-img{height: 110px}
 .r-produto .r-content{padding: 10px}
 .r-produto .r-content .r-titulo{line-height: 30px}
