@@ -156,7 +156,7 @@ export default class Cardapio extends React.Component {
 
     showVariedade(item, k){
         return (
-            <div key={k} className="col l3 m4 s6 ">
+            <div key={k} className="col l3 m4 s6" style={{padding:0}}>
                 <Produto item={item} showModal={this.showModal.bind(this)} />
             </div>
         )

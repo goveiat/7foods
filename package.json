@@ -32,6 +32,7 @@
   "dependencies": {
     "materialize-css": "^0.98.0",
     "react": "^15.4.2",
+    "react-clamp": "^1.0.4",
     "react-dom": "^15.4.2",
     "react-responsive": "^1.2.6",
     "react-router": "^3.0.2",
