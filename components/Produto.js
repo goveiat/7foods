@@ -32,19 +32,19 @@ export default class Produto extends React.Component {
 
     render() {
         return (
-          <div className="card" style={{height: 200, margin:0}}>
-            <div className="card-image waves-effect waves-block waves-light activator" style={{height: 110, background: `url(http://ligchina.a2${this.props.item.Image})`, backgroundSize: 'cover', zIndex:0}}>
-            </div>
-            <div className="card-content" style={{padding: 10}}>
-              <span style={{lineHeight: '30px'}} className="card-title activator grey-text text-darken-4"><Clamp clamp={2}>{this.props.item.Name}</Clamp></span>
-            </div>
-            <div className="card-reveal" style={{padding: 10}}>
-              <span className="card-title grey-text text-darken-4"><i className="material-icons right">close</i><Clamp clamp={1}>{this.props.item.Name}</Clamp></span>
-              <p style={{textAlign: 'justify'}}> <Clamp clamp={3}>{this.props.item.Description}</Clamp> A partir de <strong>R$ {this.props.item.minVal.replace('.',',')}.</strong></p>
-              <p style={this.styles.btnVerMais} >
-                  <a className="waves-effect waves-light btn" onClick={()=>{this.props.showModal(this.props.item)}}>Ver mais</a>
-              </p>
-            </div>
+          <div className="r-produto card">
+              <div className="r-img card-image waves-effect waves-block waves-light activator" style={{background: `url(http://ligchina.a2${this.props.item.Image})`, backgroundSize: 'cover', zIndex:0}}>
+              </div>
+              <div className="r-content card-content">
+                  <span className="r-titulo card-title activator grey-text text-darken-4"><Clamp clamp={2}>{this.props.item.Name}</Clamp></span>
+              </div>
+              <div className="r-reveal card-reveal">
+                  <span className="card-title grey-text text-darken-4"><i className="material-icons right">close</i><Clamp clamp={1}>{this.props.item.Name}</Clamp></span>
+                  <Clamp style={{textAlign: 'justify'}} clamp={4}>{this.props.item.Description} A partir de <strong>R$ {this.props.item.minVal.replace('.',',')}.</strong></Clamp>
+                  <p style={this.styles.btnVerMais} >
+                      <a className="waves-effect waves-light btn" onClick={()=>{this.props.showModal(this.props.item)}}>Ver mais</a>
+                  </p>
+              </div>
           </div>
         )
     }
